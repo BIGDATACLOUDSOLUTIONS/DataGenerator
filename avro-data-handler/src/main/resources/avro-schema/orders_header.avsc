@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "namespace": "com.bdcs.data.generator.avro.orders",
+  "name": "OrdersHeaderAvro",
+  "version": "1",
+  "fields": [
+    {
+      "name": "order_id",
+      "type": "string"
+    },
+    {
+      "name": "order_date",
+      "type": "string"
+    },
+    {
+      "name": "total_price",
+      "type": "int"
+    },
+    {
+      "name": "customer_id",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "customer_id": "",
+  "gender": "male",
+  "name": {
+    "title": "Mr",
+    "first": "Zlatko",
+    "last": "Lončarević"
+  },
+  "address": {
+    "street": {
+      "number": 3271,
+      "name": "Drage Jonaš"
+    },
+    "city": "Ćićevac",
+    "state": "Kosovo-Pomoravlje",
+    "country": "Serbia",
+    "postcode": 35368
+  },
+  "email": "zlatko.loncarevic@example.com",
+  "dob": {
+    "date": "1999-03-27T20:28:10.140Z",
+    "age": 24
+  },
+  "registration_timestamp": "",
+  "phone": "014-8359-436"
+}

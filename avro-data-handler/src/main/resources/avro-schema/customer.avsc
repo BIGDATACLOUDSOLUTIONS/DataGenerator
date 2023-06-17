@@ -1,0 +1,109 @@
+{
+  "type": "record",
+  "namespace": "com.bdcs.data.generator.avro.customers",
+  "name": "CustomerAvro",
+  "version": "1",
+  "fields": [
+    {
+      "name": "customer_id",
+      "type": "string"
+    },
+    {
+      "name": "gender",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": {
+        "type": "record",
+        "name": "Name",
+        "fields": [
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "first",
+            "type": "string"
+          },
+          {
+            "name": "last",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "address",
+      "type": {
+        "type": "record",
+        "name": "Address",
+        "fields": [
+          {
+            "name": "street",
+            "type": {
+              "type": "record",
+              "name": "Street",
+              "fields": [
+                {
+                  "name": "number",
+                  "type": "int"
+                },
+                {
+                  "name": "name",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "city",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          },
+          {
+            "name": "postcode",
+            "type": "long"
+          }
+        ]
+      }
+    },
+    {
+      "name": "email",
+      "type": "string"
+    },
+    {
+      "name": "dob",
+      "type": {
+        "type": "record",
+        "name": "Dob",
+        "fields": [
+          {
+            "name": "date",
+            "type": "string"
+          },
+          {
+            "name": "age",
+            "type": "int"
+          }
+        ]
+      }
+    },
+    {
+      "name": "registration_timestamp",
+      "type": "string"
+    },
+    {
+      "name": "phone",
+      "type": "string"
+    }
+  ]
+}
+

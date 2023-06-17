@@ -1,0 +1,133 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    ports:
+      - "32181:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    restart: no
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka1
+    depends_on:
+      - zookeeper
+    ports:
+      - "9093:9093"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:9093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: no
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.4.0
+    profiles:
+      - kafka_cluster
+    container_name: kafka2
+    depends_on:
+      - zookeeper
+    ports:
+      - "9094:9094"
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka2:9092,PLAINTEXT_HOST://localhost:9093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: no
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.4.0
+    profiles:
+      - kafka_cluster
+    container_name: kafka3
+    depends_on:
+      - zookeeper
+    ports:
+      - "9095:9095"
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka3:9092,PLAINTEXT_HOST://localhost:9093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: no
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.4.0
+    container_name: schema-registry
+    depends_on:
+      - kafka1
+    ports:
+      - "8081:8081"
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka1:9092
+      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081
+      - SCHEMA_REGISTRY_DEBUG=true
+    restart: no
+
+  kafka-rest:
+    image: confluentinc/cp-kafka-rest:7.4.0
+    container_name: kafka-rest
+    depends_on:
+      - kafka1
+      - schema-registry
+    ports:
+      - "8082:8082"
+    environment:
+      - KAFKA_REST_ZOOKEEPER_CONNECT='zookeeper:2181'
+      - KAFKA_REST_BOOTSTRAP_SERVERS=kafka1:9092
+      - KAFKA_REST_LISTENERS=http://0.0.0.0:8082
+      - KAFKA_REST_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - KAFKA_REST_HOST_NAME=kafka-rest
+      - KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN=*
+    restart: no
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.4.0
+    profiles:
+      - kafka-connect
+    container_name: kafka-connect
+    depends_on:
+      - kafka1
+      - schema-registry
+    ports:
+      - "8083:8083"
+    environment:
+      - CONNECT_BOOTSTRAP_SERVERS=kafka1:9092
+      - CONNECT_REST_PORT=8083
+      - CONNECT_REST_LISTENERS='http://0.0.0.0:8083'
+      - CONNECT_REST_ADVERTISED_HOST_NAME=connect
+      - CONNECT_CONFIG_STORAGE_TOPIC=kafka-connect-configs
+      - CONNECT_OFFSET_STORAGE_TOPIC=kafka-connect-offsets
+      - CONNECT_STATUS_STORAGE_TOPIC=kafka-connect-status
+      - CONNECT_GROUP_ID=kafka-connect
+      - CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE='true'
+      - CONNECT_KEY_CONVERTER='io.confluent.connect.avro.AvroConverter'
+      - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL='http://schema-registry:8081'
+      - CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE='true'
+      - CONNECT_VALUE_CONVERTER='io.confluent.connect.avro.AvroConverter'
+      - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL='http://schema-registry:8081'
+      - CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR='1'
+      - CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR='1'
+      - CONNECT_STATUS_STORAGE_REPLICATION_FACTOR='1'
+      - CONNECT_PLUGIN_PATH=/usr/share/java,/etc/kafka-connect/jars
+      - CONNECT_LOG4J_LOGGERS=org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR
+    restart: no
