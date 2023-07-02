@@ -41,3 +41,9 @@ build/
 generated-files
 
 avro-data-handler/src/main/java
+docker/data-generator/DataGenerator.jar
+docker/data-generator/input_files.zip
+
+common/dependency-reduced-pom.xml
+data-library/dependency-reduced-pom.xml
+data-writer/dependency-reduced-pom.xml
