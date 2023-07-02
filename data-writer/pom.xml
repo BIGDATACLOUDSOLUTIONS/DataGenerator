@@ -107,6 +107,7 @@
                                     </fileset>
                                 </copy>
 
+<!--
                                 <copy todir="${applications.dir}" filtering="true">
                                     <filterchain>
                                         <fixcrlf srcdir="${src}" includes="**/*.sh,**/*.properties,**/*.conf"
@@ -116,6 +117,7 @@
                                     <fileset dir="../data-writer/src/main/resources">
                                     </fileset>
                                 </copy>
+-->
 
                             </target>
                         </configuration>
