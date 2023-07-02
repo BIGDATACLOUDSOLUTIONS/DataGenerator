@@ -53,23 +53,36 @@ Please note that the application is still a work in progress, with the customer 
    - **Run on Docker Container**: Build the image and run the container using docker compose
         1. Build the Docker image: This will build the image and copy the relevant files to the image
            ```
-           cd docker/data-generator
-           sh -x build_docker_image.sh --build
+           sh -x docker/data-generator/build_docker_image.sh --build
            ```
         2. Start the application: Using the setting in docker-compose.yml, generate the data
            ```
-           docker-compose up
+           docker-compose -f docker/data-generator/docker-compose.yml --profile <choose the profile name> up
            ```
+           - List of profiles:
+             - customers-<file/kafka>
+             - products-<file/kafka>
+             - stores-<file/kafka>
+             - orders-<file/kafka>
+             - payments-<file/kafka>
         The output will be populated in a folder named generated-files based on volume mounting in docker compose
+    
+   - **About the Data**
+     - Customers, products and stores data are not dependent on any other data and can be generated independently.
+     - Orders data is dependent on customers, products and stores data. So when you generate orders data, 
+     it will first generate Customers, products and stores data and push them to TARGET_TYPE and then using the same,
+     it will generate orders-detail and order-header data. This is done to provide joining condition b/w all the data.
+     - payments data is also same as orders and it dependents on all above data
+     - In case of orders and payments, if TARGET_TYPE=kafka, all the pre-requisites data is written to both file and kafka.
+       If you want to get the file, mount the volume
+        
 
-
-The application will start generating data based on the provided configurations.
-
+The application will start generating data based on the provided configurations.</br>
 Please ensure that you have sufficient resources allocated to Docker to handle the data generation requirements. Also, refer to the application's documentation for any additional details or specific usage instructions.
 
 ## Future Development
 
-Future development of the application will focus on implementing data generation modules for stores, survey, product, and order. These additions will enhance the application's capabilities and enable the generation of a broader range of data types.
+Future development of the application will focus on implementing data generation modules for more useful data. These additions will enhance the application's capabilities and enable the generation of a broader range of data types.
 
 If you encounter any issues or have suggestions for improvement, please feel free to contribute to the project or reach out to the project maintainers.
 
