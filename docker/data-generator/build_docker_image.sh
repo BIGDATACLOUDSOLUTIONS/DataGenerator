@@ -2,6 +2,10 @@
 
 set -ex
 
+# Get the script's directory path
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd ${SCRIPT_DIR}
+
 function parse_args(){
   while [[ $1 = -* ]]; do
     case $1 in
@@ -47,6 +51,6 @@ fi
 
 
 if [[ ${start_container} == 'yes' ]]; then
-  docker run -it --rm ${DATA_GENERATOR_IMAGE_NAME} /bin/bash
+  docker run -it --rm ${DATA_GENERATOR_IMAGE_NAME} default
 fi
 
