@@ -105,8 +105,8 @@ object KafkaProducerAndConsumer {
                                topicName:String
                               ): Unit = {
     consumer_props.put("group.id", topicName)
-    consumer_props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringSerializer")
-    consumer_props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringSerializer")
+    consumer_props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
+    consumer_props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
 
     val kafkaConsumer = new KafkaConsumer[String, String](consumer_props)
     kafkaConsumer.subscribe(Collections.singleton(topicName))
