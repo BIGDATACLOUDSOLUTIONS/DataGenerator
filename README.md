@@ -38,7 +38,11 @@ Please note that the application is still a work in progress, with the customer 
    ```
    sh -x build.sh
    ```
-5. After building the code, you can run the code locally or on docker container
+5. Start Kafka Cluster in a separate terminal
+    ```
+    docker compose -f docker/kafka-cluster/docker-compose.yml up
+    ```
+6After building the code, you can run the code locally or on docker container
    <br></br>
    - **Run locally**: Update the variables of the below script and run the same
      ```
