@@ -22,6 +22,7 @@ object ConfigureParameters {
   val ordersHeaderOutputFilePath=s"generated-files/$getDataFormat/ordersHeader.$getDataFormat"
   val ordersDetailOutputFilePath=s"generated-files/$getDataFormat/ordersDetail.$getDataFormat"
   val paymentsOutputFilePath=s"generated-files/$getDataFormat/payments.$getDataFormat"
+  val reviewsOutputFilePath=s"generated-files/$getDataFormat/reviews.$getDataFormat"
 
   def getNoOfMessageToPublish: String = {
     NUMBER_OF_MESSAGES_TO_PUBLISH match {
