@@ -1,6 +1,6 @@
 package com.bdcs.data.generator.customers
 
-import com.bdcs.data.generator.lib.customers.{CustomerModel, Customers}
+import com.bdcs.data.generator.lib.customer.{CustomerModel, Customers}
 import com.bdcs.data.generator.avro.customers.CustomerAvro
 import com.bdcs.data.generator.customers.CustomerPayload._
 
@@ -60,7 +60,7 @@ object CustomerWriter {
     }
 
     if (targetType.equals("kafka")) {
-      val kafkaTopicName = if (writeToFileAndKafka) "customers" else getKafkaTopicName
+      val kafkaTopicName = if (writeToFileAndKafka) "customer" else getKafkaTopicName
       println(s"Customers Kafka Topic Name: $kafkaTopicName")
 
       if (dataFormat.equals("avro")) {

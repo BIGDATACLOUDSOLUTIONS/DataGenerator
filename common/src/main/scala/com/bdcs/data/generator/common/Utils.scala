@@ -1,7 +1,13 @@
 package com.bdcs.data.generator.common
+
 import java.io.File
 import java.nio.file.{FileSystems, Files, Paths}
 import scala.reflect.io.Directory
+import org.json4s.DefaultFormats
+import org.json4s._
+import org.json4s.jackson.JsonMethods.parse
+
+import scala.io.Source
 
 object Utils {
 
@@ -31,5 +37,16 @@ object Utils {
     if (Files.exists(path)) deleteNonEmptyDir(outputDir)
     Files.createDirectories(path)
   }
+
+  def readJsonFile[T: Manifest](filePath: String): Array[T] = {
+    implicit val formats: DefaultFormats.type = DefaultFormats
+    val source = Source.fromFile(filePath)
+    val result: Array[T] = source.getLines.map(line => {
+      val jsValue = parse(s"""$line""")
+      jsValue.extract[T]
+    }).toArray
+    result
+  }
+
 
 }

@@ -44,6 +44,33 @@
             <version>${confluent.version}</version>
         </dependency>
 
+        <!--Apache commons-->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <!--Jackson Databind-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_2.12</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+
+        <!-- Jackson module for scala object marshalling and unmarshalling -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -83,6 +110,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!--force discovery of generated classes-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -99,6 +127,26 @@
                             <sources>
                                 <source>target/generated-sources/avro</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Json Schema to POJO plugin-->
+            <plugin>
+                <groupId>org.jsonschema2pojo</groupId>
+                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                <version>0.5.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/json-schema/</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                            <includeAdditionalProperties>false</includeAdditionalProperties>
+                            <includeHashcodeAndEquals>false</includeHashcodeAndEquals>
                         </configuration>
                     </execution>
                 </executions>

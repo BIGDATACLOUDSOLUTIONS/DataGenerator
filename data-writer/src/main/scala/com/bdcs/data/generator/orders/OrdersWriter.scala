@@ -34,11 +34,11 @@ object OrdersWriter {
 
     val writeToFileAndKafka = if (targetType.equals("file")) false else true
 
-    println("*************** Writing Products, Stores And Customers Data: STARTED ****************")
+    println("*************** Writing Products, Store And Customers Data: STARTED ****************")
     ProductsWriter.productsWriter(numberOfOrders, dataFormat, targetType, printMessagesOnConsole, writeToFileAndKafka)
     StoresWriter.storesWriter(numberOfOrders, dataFormat, targetType, printMessagesOnConsole, writeToFileAndKafka)
     CustomerWriter.customerWriter(numberOfOrders, dataFormat, targetType, printMessagesOnConsole, writeToFileAndKafka)
-    println("*************** Writing Products, Stores And Customers Data: COMPLETED ****************")
+    println("*************** Writing Products, Store And Customers Data: COMPLETED ****************")
 
   }
 

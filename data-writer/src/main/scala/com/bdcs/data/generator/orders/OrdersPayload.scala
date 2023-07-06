@@ -3,7 +3,7 @@ package com.bdcs.data.generator.orders
 import com.bdcs.data.generator.avro.orders.OrdersHeaderAvro
 import com.bdcs.data.generator.lib.orders.OrderHeaderModel
 import com.bdcs.data.generator.avro.orders.OrdersDetailAvro
-import com.bdcs.data.generator.lib.orders.OrderDetailModel
+import com.bdcs.data.generator.lib.orders.orderLineDetails
 
 import org.json4s.DefaultFormats
 import org.json4s.jackson.Serialization.write
@@ -27,12 +27,12 @@ object OrdersPayload {
       .build
   }
 
-  def getOrdersDetailJsonPayload(ordersDetail: OrderDetailModel): String = {
+  def getOrdersDetailJsonPayload(ordersDetail: orderLineDetails): String = {
     implicit val formats: DefaultFormats.type = DefaultFormats
     write(ordersDetail)
   }
 
-  def getOrdersDetailAvroPayload(ordersDetail: OrderDetailModel): OrdersDetailAvro = {
+  def getOrdersDetailAvroPayload(ordersDetail: orderLineDetails): OrdersDetailAvro = {
 
     OrdersDetailAvro.newBuilder
       .setOrderItemId(ordersDetail.order_item_id)

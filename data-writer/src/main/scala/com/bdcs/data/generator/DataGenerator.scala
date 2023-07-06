@@ -6,6 +6,7 @@ import com.bdcs.data.generator.stores.StoresWriter
 import com.bdcs.data.generator.products.ProductsWriter
 import com.bdcs.data.generator.orders.OrdersWriter
 import com.bdcs.data.generator.payments.PaymentsWriter
+import com.bdcs.data.generator.posInvoices.PosInvoiceWriter
 import com.bdcs.data.generator.reviews.ReviewsWriter
 
 object DataGenerator {
@@ -13,9 +14,9 @@ object DataGenerator {
 
     println("Started DataGenerator App..............................")
 
-    dataCategory = args(0).toLowerCase // customers/stores/product etc
+    dataCategory = args(0).toLowerCase // customer/store/product etc
 
-    val validValuesForCategory = List("customers", "stores", "products", "orders", "payments", "reviews")
+    val validValuesForCategory = List("customer", "store", "product", "orders", "payments", "reviews", "invoices")
 
     if (!validValuesForCategory.contains(dataCategory)) {
       throw new Exception(s"DataCategory can be either of ${validValuesForCategory.mkString("/ ")}")
@@ -26,12 +27,13 @@ object DataGenerator {
     println(s"TARGET_TYPE: $getTarget") //Kafka/File
     println(s"OUTPUT_DATA_FORMAT: $getDataFormat") //Avro/json
 
-    if (dataCategory.equals("customers")) CustomerWriter()
-    if (dataCategory.equals("stores")) StoresWriter()
-    if (dataCategory.equals("products")) ProductsWriter()
+    if (dataCategory.equals("customer")) CustomerWriter()
+    if (dataCategory.equals("store")) StoresWriter()
+    if (dataCategory.equals("product")) ProductsWriter()
     if (dataCategory.equals("orders")) OrdersWriter()
     if (dataCategory.equals("payments")) PaymentsWriter()
     if (dataCategory.equals("reviews")) ReviewsWriter()
+    if (dataCategory.equals("invoices")) PosInvoiceWriter()
 
     println("DataGenerator App Completed Successfully..............................")
   }

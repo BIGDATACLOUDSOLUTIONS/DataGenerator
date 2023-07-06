@@ -1,7 +1,7 @@
 package com.bdcs.data.generator.orders
 
 import com.bdcs.data.generator.avro.orders.OrdersDetailAvro
-import com.bdcs.data.generator.lib.orders.OrderDetailModel
+import com.bdcs.data.generator.lib.orders.orderLineDetails
 import com.bdcs.data.generator.orders.OrdersPayload._
 
 import com.bdcs.data.generator.common.Utils._
@@ -17,7 +17,7 @@ import java.io.{File, IOException}
 
 object OrdersDetailWriter {
 
-  def apply(ordersDetailRecords :Array[OrderDetailModel]): Unit = {
+  def apply(ordersDetailRecords :Array[orderLineDetails]): Unit = {
     val numberOfCustomers = getNoOfMessageToPublish.toInt
     val dataFormat: String = getDataFormat
     val targetType = getTarget
@@ -28,7 +28,7 @@ object OrdersDetailWriter {
   def ordersDetailWriter(numberOfOrders: Int,
                          dataFormat: String,
                          targetType: String,
-                         orders: Array[OrderDetailModel],
+                         orders: Array[orderLineDetails],
                          printMessagesOnConsole:Boolean,
                          writeToFileAndKafka: Boolean = false
                         ): Unit = {
@@ -43,7 +43,7 @@ object OrdersDetailWriter {
         val datumWriter = new SpecificDatumWriter[OrdersDetailAvro](classOf[OrdersDetailAvro])
         val dataFileWriter: DataFileWriter[OrdersDetailAvro] = new DataFileWriter[OrdersDetailAvro](datumWriter)
         implicit val writer: DataFileWriter[OrdersDetailAvro] = dataFileWriter.create(new OrdersDetailAvro().getSchema, new File(ordersDetailOutputFilePath))
-        writeAvroToFile[OrdersDetailAvro, OrderDetailModel](
+        writeAvroToFile[OrdersDetailAvro, orderLineDetails](
           orders,
           getOrdersDetailAvroPayload)
 
@@ -52,7 +52,7 @@ object OrdersDetailWriter {
 
       }
       if (dataFormat.equals("json")) {
-        writeJsonToFile[OrderDetailModel](
+        writeJsonToFile[orderLineDetails](
           orders,
           ordersDetailOutputFilePath,
           getOrdersDetailJsonPayload)
@@ -63,13 +63,13 @@ object OrdersDetailWriter {
       val kafkaTopicName = "orders-detail"
       println(s"Orders_Detail Kafka Topic Name: $kafkaTopicName")
       if (dataFormat.equals("avro")) {
-        kafkaAvroProducer[OrdersDetailAvro, OrderDetailModel](
+        kafkaAvroProducer[OrdersDetailAvro, orderLineDetails](
           orders,
           getOrdersDetailAvroPayload, kafkaTopicName)
         if (printMessagesOnConsole) kafkaAvroConsoleConsumer[OrdersDetailAvro](numberOfOrders, kafkaTopicName)
       }
       if (dataFormat.equals("json")) {
-        kafkaJsonProducer[OrderDetailModel](orders, getOrdersDetailJsonPayload, kafkaTopicName)
+        kafkaJsonProducer[orderLineDetails](orders, getOrdersDetailJsonPayload, kafkaTopicName)
         if (printMessagesOnConsole) kafkaJsonConsoleConsumer(numberOfOrders, kafkaTopicName)
       }
     }

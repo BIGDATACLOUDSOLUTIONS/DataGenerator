@@ -7,9 +7,9 @@ services:
   customers-file:
     image: generator:latest
     profiles:
-      - customers-file
+      - customer-file
     restart: no
-    container_name: customers-file
+    container_name: customer-file
     volumes:
       - ./generated-files:/root/generated-files
     environment:
@@ -17,32 +17,32 @@ services:
       - TARGET_TYPE=file
       - OUTPUT_DATA_FORMAT=json
       - PRINT_DATA_ON_CONSOLE=false
-    command: customers
+    command: customer
 
   customers-kafka:
     image: generator:latest
     profiles:
-      - customers-kafka
+      - customer-kafka
     restart: no
-    container_name: customers-kafka
+    container_name: customer-kafka
     environment:
       - NUMBER_OF_MESSAGES_TO_PUBLISH=10
       - TARGET_TYPE=kafka
       - OUTPUT_DATA_FORMAT=avro
       - PRINT_DATA_ON_CONSOLE=true
       - KAFKA_BROKERS=127.0.0.1:9092
-      - KAFKA_TOPIC=customers-avro
+      - KAFKA_TOPIC=customer-avro
       - ZOOKEEPER=127.0.0.1:2181
       - SCHEMA_REGISTRY_URL=http://127.0.0.1:18081
-    command: customers
+    command: customer
     network_mode: host
 
   products-file:
     image: generator:latest
     profiles:
-      - products-file
+      - product-file
     restart: no
-    container_name: products-file
+    container_name: product-file
     volumes:
       - ./generated-files:/root/generated-files
     environment:
@@ -50,32 +50,32 @@ services:
       - TARGET_TYPE=file
       - OUTPUT_DATA_FORMAT=json
       - PRINT_DATA_ON_CONSOLE=false
-    command: products
+    command: product
 
   products-kafka:
     image: generator:latest
     profiles:
-      - products-kafka
+      - product-kafka
     restart: no
-    container_name: products-kafka
+    container_name: product-kafka
     environment:
       - NUMBER_OF_MESSAGES_TO_PUBLISH=10
       - TARGET_TYPE=kafka
       - OUTPUT_DATA_FORMAT=avro
       - PRINT_DATA_ON_CONSOLE=true
       - KAFKA_BROKERS=127.0.0.1:9092
-      - KAFKA_TOPIC=products-avro
+      - KAFKA_TOPIC=product-avro
       - ZOOKEEPER=127.0.0.1:2181
       - SCHEMA_REGISTRY_URL=http://127.0.0.1:18081
-    command: products
+    command: product
     network_mode: host
 
   stores-file:
     image: generator:latest
     profiles:
-      - stores-file
+      - store-file
     restart: no
-    container_name: stores-file
+    container_name: store-file
     volumes:
       - ./generated-files:/root/generated-files
     environment:
@@ -83,30 +83,30 @@ services:
       - TARGET_TYPE=file
       - OUTPUT_DATA_FORMAT=json
       - PRINT_DATA_ON_CONSOLE=false
-    command: stores
+    command: store
 
   stores-kafka:
     image: generator:latest
     profiles:
-      - stores-kafka
+      - store-kafka
     restart: no
-    container_name: stores-kafka
+    container_name: store-kafka
     environment:
       - NUMBER_OF_MESSAGES_TO_PUBLISH=10
       - TARGET_TYPE=kafka
       - OUTPUT_DATA_FORMAT=avro
       - PRINT_DATA_ON_CONSOLE=true
       - KAFKA_BROKERS=127.0.0.1:9092
-      - KAFKA_TOPIC=stores-avro
+      - KAFKA_TOPIC=store-avro
       - ZOOKEEPER=127.0.0.1:2181
       - SCHEMA_REGISTRY_URL=http://127.0.0.1:18081
-    command: stores
+    command: store
     network_mode: host
   ######################################################
   # In case of orders and payment,
-  # All other files like customer,product, stores will be recreated to give joining records with orders and payment
+  # All other files like customer,product, store will be recreated to give joining records with orders and payment
   # If you choose to write to file, all data will be written to file only.
-  # If you choose to write to kafka, customer, product, stores will be written to file
+  # If you choose to write to kafka, customer, product, store will be written to file
   # as well as kafka but orders/payment will be written to kafka only.
   ######################################################
   orders-file:

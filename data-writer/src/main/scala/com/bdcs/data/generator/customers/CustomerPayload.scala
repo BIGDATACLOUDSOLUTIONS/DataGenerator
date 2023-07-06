@@ -1,7 +1,7 @@
 package com.bdcs.data.generator.customers
 
 import com.bdcs.data.generator.avro.customers._
-import com.bdcs.data.generator.lib.customers.CustomerModel
+import com.bdcs.data.generator.lib.customer.CustomerModel
 import org.json4s.DefaultFormats
 import org.json4s.jackson.Serialization.write
 

@@ -1,7 +1,7 @@
 package com.bdcs.data.generator.products
 
 import com.bdcs.data.generator.avro.products.ProductsAvro
-import com.bdcs.data.generator.lib.products.{Products, ProductModel}
+import com.bdcs.data.generator.lib.product.{Products, ProductModel}
 import com.bdcs.data.generator.products.ProductsPayload._
 
 import com.bdcs.data.generator.common.Utils._
@@ -57,7 +57,7 @@ object ProductsWriter {
     }
 
     if (targetType.equals("kafka")) {
-      val kafkaTopicName = if (writeToFileAndKafka) "products" else getKafkaTopicName
+      val kafkaTopicName = if (writeToFileAndKafka) "product" else getKafkaTopicName
       println(s"Products Kafka Topic Name: $kafkaTopicName")
       if (dataFormat.equals("avro")) {
         kafkaAvroProducer[ProductsAvro, ProductModel](

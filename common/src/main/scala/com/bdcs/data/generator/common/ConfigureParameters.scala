@@ -16,9 +16,9 @@ object ConfigureParameters {
 
   var dataCategory: String = null
 
-  val customerOutputFilePath=s"generated-files/$getDataFormat/customers.$getDataFormat"
-  val productOutputFilePath=s"generated-files/$getDataFormat/products.$getDataFormat"
-  val storesOutputFilePath=s"generated-files/$getDataFormat/stores.$getDataFormat"
+  val customerOutputFilePath=s"generated-files/$getDataFormat/customer.$getDataFormat"
+  val productOutputFilePath=s"generated-files/$getDataFormat/product.$getDataFormat"
+  val storesOutputFilePath=s"generated-files/$getDataFormat/store.$getDataFormat"
   val ordersHeaderOutputFilePath=s"generated-files/$getDataFormat/ordersHeader.$getDataFormat"
   val ordersDetailOutputFilePath=s"generated-files/$getDataFormat/ordersDetail.$getDataFormat"
   val paymentsOutputFilePath=s"generated-files/$getDataFormat/payments.$getDataFormat"

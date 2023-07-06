@@ -1,7 +1,7 @@
 package com.bdcs.data.generator.stores
 
 import com.bdcs.data.generator.avro.stores.StoresAvro
-import com.bdcs.data.generator.lib.stores.StoresModel
+import com.bdcs.data.generator.lib.store.StoresModel
 
 import org.json4s.DefaultFormats
 import org.json4s.jackson.Serialization.write

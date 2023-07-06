@@ -2,7 +2,7 @@ package com.bdcs.data.generator.stores
 
 
 import com.bdcs.data.generator.avro.stores.StoresAvro
-import com.bdcs.data.generator.lib.stores.{Stores, StoresModel}
+import com.bdcs.data.generator.lib.store.{Store, StoresModel}
 import com.bdcs.data.generator.stores.StoresPayload._
 
 import com.bdcs.data.generator.common.Utils._
@@ -32,12 +32,12 @@ object StoresWriter {
                   ): Unit = {
 
     val stores: Array[StoresModel] = {
-      Stores(numberOfStores)
-      Stores.storesRecords
+      Store(numberOfStores)
+      Store.storesRecords
     }
 
     if (targetType.equals("file") || writeToFileAndKafka) {
-      println(s"Stores File Path: $storesOutputFilePath")
+      println(s"Store File Path: $storesOutputFilePath")
       createDirIfNotExists(storesOutputFilePath)
       deleteFileIfExists(storesOutputFilePath)
 
@@ -59,8 +59,8 @@ object StoresWriter {
     }
 
     if (targetType.equals("kafka")) {
-      val kafkaTopicName = if (writeToFileAndKafka) "stores" else getKafkaTopicName
-      println(s"Stores Kafka Topic Name: $kafkaTopicName")
+      val kafkaTopicName = if (writeToFileAndKafka) "store" else getKafkaTopicName
+      println(s"Store Kafka Topic Name: $kafkaTopicName")
       if (dataFormat.equals("avro")) {
         kafkaAvroProducer[StoresAvro, StoresModel](
           stores, getStoresAvroPayload, kafkaTopicName)

@@ -1,16 +1,16 @@
 #!/bin/bash
 
 export PRINT_DATA_ON_CONSOLE=true
-export KAFKA_BROKERS=127.0.0.1:9092
-export ZOOKEEPER=127.0.0.1:2181
-export SCHEMA_REGISTRY_URL=http://127.0.0.1:18081
+export KAFKA_BROKERS=192.168.1.10:9092
+export ZOOKEEPER=192.168.1.10:2181
+export SCHEMA_REGISTRY_URL=http://192.168.1.10:18081
 
-export NUMBER_OF_MESSAGES_TO_PUBLISH=10
+export NUMBER_OF_MESSAGES_TO_PUBLISH=100
 export TARGET_TYPE=kafka
 
-export OUTPUT_DATA_FORMAT=avro
-export KAFKA_TOPIC=payments-avro
-DATA_CATEGORY=payments
+export OUTPUT_DATA_FORMAT=json
+export KAFKA_TOPIC=invoices-json
+DATA_CATEGORY=invoices
 
 java -cp "data-writer/target/package/applications/DataGenerator.jar" com.bdcs.data.generator.DataGenerator $DATA_CATEGORY
 
