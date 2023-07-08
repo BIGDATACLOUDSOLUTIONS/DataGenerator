@@ -19,12 +19,20 @@ case class Customer(customerId: String,
                     registrationTimestamp: String,
                     contactNumber: String,
                     email: String,
-                    address: Address
+                    address: Address,
+                    customerType: String,
+                    customerCardNo: String
                    )
 
 object Customer {
   val faker = new Faker()
   val random: Random.type = Random
+
+  var customers: Array[Customer] = Array[Customer]()
+
+  def apply(numberOfCustomers: Int): Unit = {
+    customers = (1 to numberOfCustomers).map(x => Customer.getNextCustomer).toArray
+  }
 
   def getNextCustomer: Customer = {
     val genderField = List("male", "female")(random.nextInt(2))
@@ -45,7 +53,9 @@ object Customer {
       },
       contactNumber = faker.phoneNumber().phoneNumber,
       email = faker.internet().emailAddress,
-      address = Address.getNextAddress
+      address = Address.getNextAddress,
+      customerType = List("PRIME", "NON-PRIME")(random.nextInt(2)),
+      customerCardNo = faker.number().randomNumber(16, false).toString
     )
   }
 

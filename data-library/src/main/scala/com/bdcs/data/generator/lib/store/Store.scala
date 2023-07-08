@@ -11,7 +11,12 @@ case class Store(
 
 object Store {
 
+  var stores: Array[Store] = Array[Store]()
   val faker = new Faker()
+
+  def apply(numberOfStores: Int): Unit = {
+    stores = (1 to numberOfStores).map(x => Store.getNextStore).toArray
+  }
 
   def getNextStore: Store = {
 
@@ -20,9 +25,8 @@ object Store {
       storeName = faker.company().name(),
       storeAddress = Address.getNextAddress,
     )
-
   }
 
-  def printStores(): Unit = println(getNextStore)
+  def printStore(): Unit = println(getNextStore)
 
 }

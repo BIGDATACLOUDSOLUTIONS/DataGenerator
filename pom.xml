@@ -9,8 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>avro-data-handler</module>
-        <module>common</module>
+        <module>schema-handler</module>
         <module>data-library</module>
         <module>data-writer</module>
     </modules>
@@ -19,9 +18,6 @@
         <java.version>1.8</java.version>
         <scala.major.version>2.12</scala.major.version>
         <scala.version>${scala.major.version}.11</scala.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
@@ -39,7 +35,6 @@
     </repositories>
 
     <dependencies>
-
 
     </dependencies>
 

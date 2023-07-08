@@ -1,0 +1,137 @@
+[
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "AddressAvro",
+    "fields": [
+      { "name": "addressLine", "type": "string" },
+      { "name": "city", "type": "string" },
+      { "name": "state", "type": "string" },
+      { "name": "country", "type": "string" },
+      { "name": "postcode", "type": "string" }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "StoreAvro",
+    "fields": [
+      {"name": "storeId","type": "string"},
+      {"name": "storeName","type": "string"},
+      {"name": "storeAddress","type": "com.bdcs.data.generator.avro.payment.AddressAvro" }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "CustomerAvro",
+    "fields": [
+      { "name": "customerId", "type": "string" },
+      { "name": "title", "type": "string" },
+      { "name": "firstName", "type": "string" },
+      { "name": "lastName", "type": "string" },
+      { "name": "gender", "type": "string" },
+      { "name": "dob", "type": "string" },
+      { "name": "registrationTimestamp", "type": "string" },
+      { "name": "contactNumber", "type": "string" },
+      { "name": "email", "type": "string" },
+      { "name": "address", "type": "com.bdcs.data.generator.avro.payment.AddressAvro" },
+      { "name": "customerType", "type": "string" },
+      { "name": "customerCardNo", "type": "string" }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "ProductAvro",
+    "fields": [
+      { "name": "productCode","type": "string" },
+      { "name": "productDescription","type": "string" },
+      { "name": "productPrice", "type": "double" },
+      { "name": "productCategory", "type": "string" }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "OrderLineItemAvro",
+    "fields": [
+      { "name": "orderItemId","type": "string" },
+      { "name": "product","type": "com.bdcs.data.generator.avro.payment.ProductAvro" },
+      { "name": "quantityOrdered", "type": "int" },
+      { "name": "totalPrice", "type": "double" }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "OrderAvro",
+    "fields": [
+      { "name": "orderId","type": "string" },
+      { "name": "orderDate","type": "string" },
+      { "name": "numberOfItems", "type": "int" },
+      { "name": "totalOrderAmount", "type": "double" },
+      { "name": "orderLineItems", "type": {
+        "type": "array",
+        "items": "com.bdcs.data.generator.avro.payment.OrderLineItemAvro"
+      }
+      }
+    ]
+  },
+  {
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "type": "record",
+    "name": "InvoiceAvro",
+    "fields": [
+      { "name": "invoiceNumber","type": "string" },
+      { "name": "createdTime","type": "string" },
+      { "name": "taxableAmount", "type": "double" },
+      { "name": "cGST", "type": "double" },
+      { "name": "sGST", "type": "double" },
+      { "name": "cESS", "type": "double" },
+      { "name": "order", "type": "com.bdcs.data.generator.avro.payment.OrderAvro" },
+      { "name": "customerId",  "type": ["null","string"],  "default": null },
+      { "name": "storeId" , "type": ["null","string"],  "default": null }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "name": "PaymentMasterAvro",
+    "version": "1",
+    "fields": [
+      { "name": "paymentId","type": "string" },
+      { "name": "paymentDate", "type": "string" },
+      { "name": "posID", "type": "string" },
+      { "name": "cashierID", "type": "string" },
+      { "name": "paymentMethod", "type": "string"},
+      { "name": "discount", "type": "int"},
+      { "name": "amountPaid", "type": "double"},
+      { "name": "invoice", "type": "com.bdcs.data.generator.avro.payment.InvoiceAvro"},
+      { "name": "store", "type": "com.bdcs.data.generator.avro.payment.StoreAvro"},
+      { "name": "customer", "type": "com.bdcs.data.generator.avro.payment.CustomerAvro"},
+      { "name": "deliveryType", "type": "string"},
+      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null }
+    ]
+  },
+  {
+    "type": "record",
+    "namespace": "com.bdcs.data.generator.avro.payment",
+    "name": "PaymentAvro",
+    "version": "1",
+    "fields": [
+      { "name": "paymentId","type": "string" },
+      { "name": "paymentDate", "type": "string" },
+      { "name": "posID", "type": "string" },
+      { "name": "cashierID", "type": "string" },
+      { "name": "paymentMethod", "type": "string"},
+      { "name": "discount", "type": "int"},
+      { "name": "amountPaid", "type": "double"},
+      { "name": "invoiceNumber","type": "string" },
+      { "name": "storeId","type": "string"},
+      { "name": "customerId", "type": "string" },
+      { "name": "deliveryType", "type": "string"},
+      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null }
+    ]
+  }
+]

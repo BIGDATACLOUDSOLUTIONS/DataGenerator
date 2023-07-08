@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "CustomerAvro",
+  "namespace": "com.bdcs.data.generator.avro.customer",
+  "version": "1",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "firstName", "type": "string" },
+    { "name": "lastName", "type": "string" },
+    { "name": "gender", "type": "string" },
+    { "name": "dob", "type": "string" },
+    { "name": "registrationTimestamp", "type": "string" },
+    { "name": "contactNumber", "type": "string" },
+    { "name": "email", "type": "string" },
+    {
+      "name": "address",
+      "type": {
+        "type": "record",
+        "name": "CustomerAddress",
+        "fields": [
+          { "name": "addressLine", "type": "string" },
+          { "name": "city", "type": "string" },
+          { "name": "state", "type": "string" },
+          { "name": "country", "type": "string" },
+          { "name": "postcode", "type": "string" }
+        ]
+      }
+    },
+    { "name": "customerType", "type": "string" },
+    { "name": "customerCardNo", "type": "string" }
+  ]
+}

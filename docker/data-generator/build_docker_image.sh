@@ -47,6 +47,8 @@ if [[ ${build_image} == 'yes' ]]; then
   done
   # Build the Airflow Image
   docker build -t ${DOCKER_TAG}:${VERSION} .
+  rm DataGenerator.jar
+  rm input_files.zip
 fi
 
 

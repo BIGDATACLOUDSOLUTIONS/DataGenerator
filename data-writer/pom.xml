@@ -12,13 +12,16 @@
     <artifactId>data-writer</artifactId>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.bdcs.data.generator</groupId>
+            <artifactId>schema-handler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.bdcs.data.generator</groupId>
             <artifactId>data-library</artifactId>
@@ -26,117 +29,105 @@
         </dependency>
 
         <dependency>
-            <groupId>com.bdcs.data.generator</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_2.12</artifactId>
+            <version>4.0.2</version>
         </dependency>
 
-<!--
+        <!-- https://mvnrepository.com/artifact/com.typesafe/config -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.11.0</version>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.4.1</version>
         </dependency>
--->
 
     </dependencies>
 
-    <build>
-        <sourceDirectory>src/main/scala</sourceDirectory>
-        <testSourceDirectory>src/test/scala</testSourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <version>4.5.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
+     <build>
+         <sourceDirectory>src/main/scala</sourceDirectory>
+         <testSourceDirectory>src/test/scala</testSourceDirectory>
+         <plugins>
+             <plugin>
+                 <groupId>net.alchim31.maven</groupId>
+                 <artifactId>scala-maven-plugin</artifactId>
+                 <version>4.5.4</version>
+                 <executions>
+                     <execution>
+                         <goals>
+                             <goal>compile</goal>
+                             <goal>testCompile</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+                 <configuration>
+                     <scalaVersion>${scala.version}</scalaVersion>
+                 </configuration>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-shade-plugin</artifactId>
+                 <version>3.2.4</version>
+                 <executions>
+                     <execution>
+                         <phase>package</phase>
+                         <goals>
+                             <goal>shade</goal>
+                         </goals>
+                         <configuration>
+                             <filters>
+                                 <filter>
+                                     <artifact>*:*</artifact>
+                                     <excludes>
+                                         <exclude>META-INF/*.SF</exclude>
+                                         <exclude>META-INF/*.DSA</exclude>
+                                         <exclude>META-INF/*.RSA</exclude>
+                                         <exclude>config/**</exclude>
+                                     </excludes>
+                                 </filter>
+                             </filters>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-surefire-plugin</artifactId>
+                 <version>2.7</version>
+                 <configuration>
+                     <skipTests>true</skipTests>
+                 </configuration>
+             </plugin>
 
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <property name="package.dir" value="target/package"/>
-                                <property name="applications.dir" value="${package.dir}/applications"/>
-                                <delete dir="${package.dir}"/>
-                                <mkdir dir="${package.dir}"/>
-                                <mkdir dir="${applications.dir}"/>
-                                <!-- Begin: Application file outputs -->
+             <plugin>
+                 <artifactId>maven-antrun-plugin</artifactId>
+                 <version>1.7</version>
+                 <executions>
+                     <execution>
+                         <phase>package</phase>
+                         <configuration>
+                             <target>
+                                 <property name="package.dir" value="target/package"/>
+                                 <property name="applications.dir" value="${package.dir}/applications"/>
+                                 <delete dir="${package.dir}"/>
+                                 <mkdir dir="${package.dir}"/>
+                                 <mkdir dir="${applications.dir}"/>
+                                 <!-- Begin: Application file outputs -->
 
-                                <copy tofile="${applications.dir}/DataGenerator.jar">
-                                    <fileset dir="target">
-                                        <include name="data-writer-${project.version}.jar"/>
-                                    </fileset>
-                                </copy>
+                                 <copy tofile="${applications.dir}/DataGenerator.jar">
+                                     <fileset dir="target">
+                                         <include name="data-writer-${project.version}.jar"/>
+                                     </fileset>
+                                 </copy>
 
-<!--
-                                <copy todir="${applications.dir}" filtering="true">
-                                    <filterchain>
-                                        <fixcrlf srcdir="${src}" includes="**/*.sh,**/*.properties,**/*.conf"
-                                                 eol="lf" eof="remove"/>
-                                        <expandproperties/>
-                                    </filterchain>
-                                    <fileset dir="../data-writer/src/main/resources">
-                                    </fileset>
-                                </copy>
--->
-
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                             </target>
+                         </configuration>
+                         <goals>
+                             <goal>run</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>
 
 </project>

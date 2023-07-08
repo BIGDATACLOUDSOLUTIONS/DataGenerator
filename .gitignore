@@ -40,7 +40,7 @@ build/
 .idea
 generated-files
 
-avro-data-handler/src/main/java
+schema-handler/src/main/java
 docker/data-generator/DataGenerator.jar
 docker/data-generator/input_files.zip
 
