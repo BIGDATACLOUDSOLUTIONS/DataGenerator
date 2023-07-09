@@ -7,6 +7,10 @@ import com.bdcs.data.generator.lib.payment.Payment
 import com.bdcs.data.generator.lib.product.Product
 import com.bdcs.data.generator.lib.store.Store
 
+/**
+ * This is just for testing purpose
+ */
+
 object Runner extends App{
 
   val dataCategory = "payment"

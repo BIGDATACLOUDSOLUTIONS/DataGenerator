@@ -4,40 +4,40 @@ services:
   # DataGenerator
   ######################################################
 
-  invoices:
+  Invoices:
     image: generator:latest
     profiles:
-      - invoices
+      - Invoices
     restart: no
-    container_name: customer-file
+    container_name: Invoices
     volumes:
       - ${PROJECT_BASE_DIR:-.}/generated-files:/root/generated-files
       - ${PROJECT_BASE_DIR:-.}/config/data_generator.conf:/root/config/data_generator.conf
-    command: invoices
+    command: Invoices
     network_mode: host
 
-  payments:
+  Payments:
     image: generator:latest
     profiles:
-      - payments
+      - Payments
     restart: no
-    container_name: customer-file
+    container_name: Payments
     volumes:
       - ${PROJECT_BASE_DIR:-.}/generated-files:/root/generated-files
       - ${PROJECT_BASE_DIR:-.}/config/data_generator.conf:/root/config/data_generator.conf
-    command: payments
+    command: Payments
     network_mode: host
 
-  payments-master:
+  PaymentsMaster:
     image: generator:latest
     profiles:
-      - payments-master
+      - PaymentsMaster
     restart: no
-    container_name: customer-file
+    container_name: PaymentsMaster
     volumes:
       - ${PROJECT_BASE_DIR:-.}/generated-files:/root/generated-files
       - ${PROJECT_BASE_DIR:-.}/config/data_generator.conf:/root/config/data_generator.conf
-    command: payments-master
+    command: PaymentsMaster
     network_mode: host
 
 

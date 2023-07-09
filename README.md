@@ -1,33 +1,85 @@
 ## Application Summary
+This dateset is used for doing use-cases like learning spark-sql and spark structured streaming where you need some 
+data in files while some part of data in kafka. Also, we want to perform joins between different datasets/kafka stream
 
-This Scala application generates various types of data, such as customer data, stores data, survey data, product data, and order data. It provides flexibility through configurable parameters to control the data generation process.
+**About the Data**
+- One can generate either Invoices, Payments(Summary) or Payment-Master(Master Data)
+- In all cases, Customers, products and stores data are implicitly generated and always written to file.
+- Customer data is written in avro file format
+- Stores and Product Datasets are written to file in json format.
+- In case you want to perform joins with customer, store or product, these files can be used.
+
+You can configure(config/data_generator.conf) and run the application for any of the below dataset. 
+The data will be written to kafka in specified format(avro/json)
+
+- Invoices:
+  - Invoice contains Invoice identifiers and orders details. 
+  - Order is a nested json which contains order level info and array of order line details
+  - Order line details contains Product and other order line info
+- Payments:
+  - This is short description of Payment-Master and contains only keys for customer, store and invoice.
+  - This contains joining keys like invoiceNumber, customerId, StoreId.
+  - In case of Payments, both Payment and Invoices are generated on kafka topic so that the joining can be done based on invoiceNumber 
+- Payment-Master: 
+  - This contains all the fields of all the dataset in nested json.
+  - Contains Invoice, Customer, Stores
+  - Invoice contains Orders
+  - Order contains Array of OrderLineDetails
+  - OrderLineDetails contains order line details also with Product details
+  - This is a single nested json which contains all the information for a payment
+
+
 
 ### Configuration Parameters
 
 The application supports the following configurable parameters:
 
-- **NUMBER_OF_MESSAGES_TO_PUBLISH**: Specifies the number of messages to generate. The value must be less than or equal to 10,000.
-- **DATA_CATEGORY**: Determines the type of data to generate. It can be set to "customers", "stores", or any other supported data category.
-- **TARGET_TYPE**: Specifies the target destination for the generated data. It can be set to "kafka" or "files".
-- **OUTPUT_DATA_FORMAT**: Defines the output format of the generated data. It can be set to "avro" or "json".
-- **PRINT_DATA_ON_CONSOLE**: Print the output on console if set to true.
-- **KAFKA_BROKERS**: Specify the Kafka Brokers as a list if the TARGET_TYPE is set to "kafka".
-- **KAFKA_TOPIC**: Specify the name of the Kafka Topic where you wish to send the data, applicable only if TARGET_TYPE is set to "kafka".
-- **ZOOKEEPER**: Provide the Zookeeper Host:Port information, applicable only if TARGET_TYPE is set to "kafka".
-- **SCHEMA_REGISTRY_URL**: Specify the URL of the Schema Registry service if you intend to write data to Kafka in the Avro format. If set, it will send the Avro data schema to the Schema Registry service.
+- **number_of_message_to_publish**: Specifies the number of messages to generate.
+- **output_data_format**: Defines the output format of the generated data. It can be set to "avro" or "json".
+- **print_message**: Print the output on console if set to true.
+- **kafka_broker_list**: Specify the Kafka Brokers as a list.
+- **topic_name**: Specify the name of the Kafka Topic where you wish to send the data
+- **schema_registry_url**: Specify the URL of the Schema Registry service if you intend to write data to Kafka in the Avro format. If set, it will send the Avro data schema to the Schema Registry service.
+
+### Steps to run the application:
+1. Start Kafka Cluster in a terminal
+    ```
+    docker compose -f docker/kafka-cluster/docker-compose.yml up
+    ```
+2. Configure the file config/data_generator.conf and specify required details
+3. Build the code
+   ```
+   sh -x build.sh
+   ```
+4. You can run the application in 2 ways:
+   - **Locally**:
+      ```
+      DATA_CATEGORY=Payments
+      sh -x run_data_generator_locally.sh $DATA_CATEGORY
+      ```
+     **DATA_CATEGORY can either be Invoices, Payments or PaymentsMaster**
+   </br>The output data will be populated in a folder named generated-files at base location of project
+   - **On Docker Container**
 
 
-### Docker Image
+### Steps to run on Docker
+### Build Docker Image
 
-A Docker image has been created for this application, which includes the application's JAR file. This allows for easy deployment and execution using Docker.
+A Docker image has been created for this application, which includes the application's JAR file.
+This allows for easy deployment and execution using Docker.
 
 ### Docker Compose
 
-To run the application, a Docker Compose file is provided. It simplifies the setup and orchestration of the application's containers. By using Docker Compose, you can easily start the application and configure the necessary environment variables.
+To run the application, a Docker Compose file is provided. It simplifies the setup and orchestration of 
+the application's containers. By using Docker Compose, you can easily start the application and configure the 
+necessary environment variables.
 
-Ensure that you set the appropriate values for the configurable parameters mentioned above in the Docker Compose file to customize the data generation process.
+Ensure that you set the appropriate values for the configurable parameters mentioned above in the 
+Docker Compose file to customize the data generation process.
 
-Please note that the application is still a work in progress, with the customer data generation functionality already implemented. Additional data generation modules for stores, survey, product, and order are yet to be implemented.
+Please note that the application is still a work in progress, with the customer data generation functionality 
+already implemented. Additional data generation modules for stores, survey, product, and order are yet to be 
+implemented.
 
 ## Usage
 
@@ -42,14 +94,8 @@ Please note that the application is still a work in progress, with the customer 
     ```
     docker compose -f docker/kafka-cluster/docker-compose.yml up
     ```
-6After building the code, you can run the code locally or on docker container
+6. After building the code, you can run the code locally or on docker container
    <br></br>
-   - **Run locally**: Update the variables of the below script and run the same
-     ```
-     sh -x run_data_generator_locally.sh
-     ```
-      The output will be populated in a folder named generated-files at base location of project
-      <br></br>
    - **Run on Docker Container**: Build the image and run the container using docker compose
         1. Build the Docker image: This will build the image and copy the relevant files to the image
            ```
@@ -60,22 +106,10 @@ Please note that the application is still a work in progress, with the customer 
            docker-compose -f docker/data-generator/docker-compose.yml --profile <choose the profile name> up
            ```
            - List of profiles:
-             - customers-<file/kafka>
-             - products-<file/kafka>
-             - stores-<file/kafka>
-             - orders-<file/kafka>
-             - payments-<file/kafka>
+             - Invoices
+             - Payments
+             - PaymentsMaster
         The output will be populated in a folder named generated-files based on volume mounting in docker compose
-    
-   - **About the Data**
-     - Customers, products and stores data are not dependent on any other data and can be generated independently.
-     - Orders data is dependent on customers, products and stores data. So when you generate orders data, 
-     it will first generate Customers, products and stores data and push them to TARGET_TYPE and then using the same,
-     it will generate orders-detail and order-header data. This is done to provide joining condition b/w all the data.
-     - payments data is also same as orders and it dependents on all above data
-     - In case of orders and payments, if TARGET_TYPE=kafka, all the pre-requisites data is written to both file and kafka.
-       If you want to get the file, mount the volume
-        
 
 The application will start generating data based on the provided configurations.</br>
 Please ensure that you have sufficient resources allocated to Docker to handle the data generation requirements. Also, refer to the application's documentation for any additional details or specific usage instructions.

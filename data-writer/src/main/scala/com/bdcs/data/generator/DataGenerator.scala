@@ -12,10 +12,9 @@ object DataGenerator {
     val dataCategory = args(0).toLowerCase // customer/store/product etc
 
     val validValuesForCategory = List(
-      "invoices",
-      "reviews",
-      "payments",
-      "payments-master")
+      "Invoices",
+      "Payments",
+      "PaymentsMaster")
 
     if (!validValuesForCategory.contains(dataCategory)) {
       throw new Exception(s"DataCategory can be either of ${validValuesForCategory.mkString("/ ")}")
@@ -24,9 +23,9 @@ object DataGenerator {
     println(s"NUMBER_OF_MESSAGES_TO_PUBLISH: $getNoOfMessageToPublish")
     println(s"DATA_CATEGORY: $dataCategory")
 
-    if (dataCategory.equals("invoices")) InvoiceWriter()
-    if (dataCategory.equals("payments")) PaymentsWriter()
-    if (dataCategory.equals("payments-master")) PaymentsMasterWriter()
+    if (dataCategory.equals("Invoices")) InvoiceWriter()
+    if (dataCategory.equals("Payments")) PaymentsWriter()
+    if (dataCategory.equals("PaymentsMaster")) PaymentsMasterWriter()
 
     println("DataGenerator App Completed Successfully..............................")
   }
