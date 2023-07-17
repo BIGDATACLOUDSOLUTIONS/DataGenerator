@@ -1,0 +1,110 @@
+{
+  "javaType": "com.bdcs.data.generator.json.payment.PaymentMasterJson",
+  "type": "object",
+  "properties": {
+    "paymentId": {"type": "string" },
+    "paymentDate": {"type": "string" },
+    "posID": {"type": "string" },
+    "cashierID": {"type": "string" },
+    "paymentMethod": {"type": "string" },
+    "discount": {"type": "integer" },
+    "amountPaid": {"type": "number" },
+    "invoice": { "$ref": "#/definitions/Invoice" },
+    "store": { "$ref": "#/definitions/Store" },
+    "customer": { "$ref": "#/definitions/Customer" },
+    "deliveryType": {"type": "string" },
+    "deliveryAddress": { "$ref": "#/definitions/Address" }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.AddressJson",
+      "properties": {
+        "addressLine": {"type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "country": { "type": "string" },
+        "postcode": { "type": "string" }
+      }
+    },
+    "Store": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.StoreJson",
+      "properties": {
+        "storeId" :  { "type": "string" },
+        "storeName" :  { "type": "string" },
+        "storeAddress" :  { "$ref": "#/definitions/Address" }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.CustomerJson",
+      "properties": {
+        "customerId" :  { "type": "string" },
+        "title" :  { "type": "string" },
+        "firstName" :  { "type": "string" },
+        "lastName" :  { "type": "string" },
+        "gender" :  { "type": "string" },
+        "dob" :  { "type": "string" },
+        "registrationTimestamp" :  { "type": "string" },
+        "contactNumber" :  { "type": "string" },
+        "email" :  { "type": "string" },
+        "address" :  { "$ref": "#/definitions/Address" },
+        "customerType" :  { "type": "string" },
+        "customerCardNo" :  { "type": "string" }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.ProductJson",
+      "properties": {
+        "productCode" :  { "type": "string" },
+        "productDescription" :  { "type": "string" },
+        "productPrice" :  { "type": "number" },
+        "productCategory" :  { "type": "string" }
+      }
+    },
+    "OrderLineItem": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.OrderLineItemJson",
+      "properties": {
+        "orderItemId" :  { "type": "string" },
+        "product" :  { "$ref": "#/definitions/Product" },
+        "quantityOrdered" :  { "type": "integer" },
+        "totalPrice" :  { "type": "number" }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.OrderJson",
+      "properties": {
+        "orderId" :  { "type": "string" },
+        "orderDate" :  { "type": "string" },
+        "numberOfItems" :  { "type": "integer" },
+        "totalOrderAmount" :  { "type": "number" },
+        "orderLineItems" :  {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OrderLineItem" }
+        }
+      }
+    },
+    "Invoice": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.InvoiceJson",
+      "properties": {
+        "invoiceNumber" :  { "type": "string" },
+        "createdTime" :  { "type": "string" },
+        "taxableAmount" :  { "type": "number" },
+        "cGST" :  { "type": "number" },
+        "sGST" :  { "type": "number" },
+        "cESS" :  { "type": "number" },
+        "order" :  {"$ref": "#/definitions/Order" },
+        "customerId" : { "type": "string" },
+        "storeId" :  { "type": "string" }
+      }
+    }
+  }
+}
+
+
+

@@ -1,0 +1,36 @@
+[
+	{
+		"InvoiceNumber": 0,
+		"CreatedTime": "0",
+		"StoreID": "STR1534",
+		"PosID": "POS364",
+		"CashierID": "OAS898",
+		"CustomerType": "NONPRIME",
+		"CustomerCardNo": "3006055636",
+		"TotalAmount": 0,
+		"NumberOfItems": 0,
+		"PaymentMethod": "CASH",
+		"TaxableAmount": 0,
+		"CGST": 0,
+		"SGST": 0,
+		"CESS": 0,
+		"DeliveryType": "HOME-DELIVERY"
+	},
+	{
+		"InvoiceNumber": 0,
+		"CreatedTime": "0",
+		"StoreID": "STR1534",
+		"PosID": "POS135",
+		"CashierID": "OAS285",
+		"CustomerType": "PRIME",
+		"CustomerCardNo": "5582740626",
+		"TotalAmount": 0,
+		"NumberOfItems": 0,
+		"PaymentMethod": "CARD",
+		"TaxableAmount": 0,
+		"CGST": 0,
+		"SGST": 0,
+		"CESS": 0,
+		"DeliveryType": "TAKEAWAY"
+	}
+]

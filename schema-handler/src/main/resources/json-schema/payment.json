@@ -1,0 +1,32 @@
+{
+  "javaType": "com.bdcs.data.generator.json.payment.PaymentJson",
+  "type": "object",
+  "properties": {
+    "paymentId": {"type": "string" },
+    "paymentDate": {"type": "string" },
+    "posID": {"type": "string" },
+    "cashierID": {"type": "string" },
+    "paymentMethod": {"type": "string" },
+    "discount": {"type": "integer" },
+    "amountPaid": {"type": "number" },
+    "invoiceNumber": {"type": "string" },
+    "storeId": {"type": "string" },
+    "customerId": {"type": "string" },
+    "deliveryType": {"type": "string" },
+    "deliveryAddress": { "$ref": "#/definitions/Address" }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "javaType": "com.bdcs.data.generator.json.payment.AddressJson",
+      "properties": {
+        "addressLine": {"type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "country": { "type": "string" },
+        "postcode": { "type": "string" }
+      }
+    }
+  }
+}
+

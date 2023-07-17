@@ -1,105 +1,93 @@
 package com.bdcs.data.generator.payments
 
-import com.bdcs.data.generator.avro.payments.PaymentsAvro
-import com.bdcs.data.generator.lib.payments.{PaymentModel, Payments}
-import com.bdcs.data.generator.payments.PaymentsPayload._
-import com.bdcs.data.generator.common.Utils._
-import com.bdcs.data.generator.common.ConfigureParameters._
-import com.bdcs.data.generator.common.FileReaderAndWriter._
-import com.bdcs.data.generator.common.KafkaProducerAndConsumer._
-import com.bdcs.data.generator.lib.orders.Orders
-import com.bdcs.data.generator.orders.{OrdersDetailWriter, OrdersHeaderWriter, OrdersWriter}
-import org.apache.avro.file.DataFileWriter
-import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter}
+import org.apache.kafka.clients.producer.{KafkaProducer, Producer, ProducerConfig, ProducerRecord}
+import io.confluent.kafka.serializers.KafkaAvroSerializer
 
-import java.io.{File, IOException}
+import com.bdcs.data.generator.lib.customer.Customer
+import com.bdcs.data.generator.lib.product.Product
+import com.bdcs.data.generator.lib.store.Store
+import com.bdcs.data.generator.lib.payment.Payment
+
+import com.bdcs.data.generator.customers.CustomersWriter
+import com.bdcs.data.generator.products.ProductsWriter
+import com.bdcs.data.generator.stores.StoresWriter
+
+import com.bdcs.data.generator.common.AppConfig._
+
+import com.bdcs.data.generator.avro.payment.{InvoiceAvro, PaymentAvro}
+import com.bdcs.data.generator.json.payment.{InvoiceJson, PaymentJson}
+
+import com.bdcs.data.generator.invoices.serializer.InvoiceJsonSerializer
+import com.bdcs.data.generator.payments.serializer.PaymentJsonSerializer
+import com.bdcs.data.generator.common.AsynchronousProducerCallback
+
+import com.bdcs.data.generator.payments.PaymentJsonPayload.{getPaymentJsonPayload, getPaymentMasterJsonPayload}
+import com.bdcs.data.generator.payments.PaymentAvroPayload.{getPaymentAvroPayload, getPaymentMasterAvroPayload}
+
 
 object PaymentsWriter {
 
   def apply(): Unit = {
-    val numberOfPayments=getNoOfMessageToPublish.toInt
-    val dataFormat: String = getDataFormat
-    val targetType = getTarget
+    val numberOfPayments = getNoOfMessageToPublish
+    val dataFormat: String = conf.getString(PAYMENTS_OUTPUT_FORMAT)
 
-    OrdersWriter.writePrerequisitesData(
-      numberOfPayments,
-      dataFormat,
-      targetType)
+    Payment()
+    CustomersWriter.customerWriter(Customer.customers)
+    ProductsWriter.productsWriter(Product.products)
+    StoresWriter.storesWriter(Store.stores)
 
-    writePrerequisitesData(
-      numberOfPayments,
-      dataFormat,
-      targetType)
-
-    paymentsWriter(numberOfPayments, dataFormat, targetType)
+    paymentsWriter(numberOfPayments, dataFormat)
   }
 
 
-  private def writePrerequisitesData(numberOfPayments: Int,
-                                     dataFormat: String,
-                                     targetType: String,
-                                     printMessagesOnConsole: Boolean = false
-                                    ): Unit = {
+  private def paymentsWriter(numberOfPayments: Int,
+                             dataFormat: String
+                            ): Unit = {
 
-    val writeToFileAndKafka = if (targetType.equals("file")) false else true
-
-    println("*************** Writing Orders_Header and Orders_Details Data: STARTED ****************")
-    Orders(numberOfPayments)
-    OrdersHeaderWriter.ordersHeaderWriter(numberOfPayments, dataFormat, targetType, Orders.ordersHeadersRecords, printMessagesOnConsole, writeToFileAndKafka)
-    OrdersDetailWriter.ordersDetailWriter(numberOfPayments, dataFormat, targetType, Orders.ordersDetailsRecords, printMessagesOnConsole, writeToFileAndKafka)
-    println("*************** Writing Orders_Header and Orders_Details Data: COMPLETED ****************")
-
-  }
-
-
-  def paymentsWriter(numberOfPayments: Int,
-                     dataFormat: String,
-                     targetType: String
-                    ): Unit = {
-
-    val payments: Array[PaymentModel] = {
-      Payments(numberOfPayments)
-      Payments.paymentRecords
+    val paymentsProp = kafkaProducerProperties("payments")
+    val invoicesProp = kafkaProducerProperties("invoices")
+    if (dataFormat.equalsIgnoreCase("json")) {
+      paymentsProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[PaymentJsonSerializer].getName)
+      invoicesProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[InvoiceJsonSerializer].getName)
+    } else {
+      paymentsProp.setProperty("schema.registry.url", getSchemaRegistryUrl)
+      invoicesProp.setProperty("schema.registry.url", getSchemaRegistryUrl)
+      paymentsProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
+      invoicesProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
     }
 
-    if (targetType.equals("file")) {
-      println(s"Payments File Path: $paymentsOutputFilePath}")
-      createDirIfNotExists(paymentsOutputFilePath)
-      deleteFileIfExists(paymentsOutputFilePath)
+    val invoicesAvroProducer: Producer[String, InvoiceAvro] = new KafkaProducer[String, InvoiceAvro](paymentsProp)
+    val invoicesJsonProducer: Producer[String, InvoiceJson] = new KafkaProducer[String, InvoiceJson](invoicesProp)
 
-      if (dataFormat.equals("avro")) {
-        val datumWriter = new SpecificDatumWriter[PaymentsAvro](classOf[PaymentsAvro])
-        val dataFileWriter: DataFileWriter[PaymentsAvro] = new DataFileWriter[PaymentsAvro](datumWriter)
-        implicit val writer: DataFileWriter[PaymentsAvro] = dataFileWriter.create(new PaymentsAvro().getSchema, new File(paymentsOutputFilePath))
-        writeAvroToFile[PaymentsAvro, PaymentModel](
-          payments,
-          getPaymentsAvroPayload)
+    val paymentsAvroProducer: Producer[String, PaymentAvro] = new KafkaProducer[String, PaymentAvro](paymentsProp)
+    val paymentsJsonProducer: Producer[String, PaymentJson] = new KafkaProducer[String, PaymentJson](paymentsProp)
 
-        implicit val datumReader: SpecificDatumReader[PaymentsAvro] = new SpecificDatumReader[PaymentsAvro](classOf[PaymentsAvro])
-        if(printOnConsole) getJsonStringRecordsFromAvroFile[PaymentsAvro](paymentsOutputFilePath).foreach(println)
-      }
-      if (dataFormat.equals("json")) {
-        writeJsonToFile[PaymentModel](
-          payments,
-          paymentsOutputFilePath,
-          getPaymentsJsonPayload)
-        if(printOnConsole) getJsonStringRecordsFromJsonFile(paymentsOutputFilePath).foreach(println)
-      }
-    }
+    var startIndex: Int = 1
+    while (startIndex <= numberOfPayments) {
+      if (dataFormat.equalsIgnoreCase("json")) {
+        val nextPayment = Payment.getNextPayment
+        val paymentSummaryRecord = getPaymentJsonPayload(nextPayment)
+        val paymentMasterRecord = getPaymentMasterJsonPayload(nextPayment)
+        val invoiceRecord: InvoiceJson = paymentMasterRecord.getInvoice
 
-    if (targetType.equals("kafka")) {
-      println(s"Payments Kafka Topic Name: $getKafkaTopicName")
-      if (dataFormat.equals("avro")) {
-        kafkaAvroProducer[PaymentsAvro, PaymentModel](
-          payments,
-          getPaymentsAvroPayload, getKafkaTopicName)
-        if(printOnConsole) kafkaAvroConsoleConsumer[PaymentsAvro](numberOfPayments, getKafkaTopicName)
+        val invoiceProducerRecord = new ProducerRecord[String, InvoiceJson](conf.getString(INVOICES_TOPIC),invoiceRecord.getInvoiceNumber, invoiceRecord)
+        invoicesJsonProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
+
+        val paymentsProducerRecord = new ProducerRecord[String, PaymentJson](conf.getString(PAYMENTS_TOPIC),paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
+        paymentsJsonProducer.send(paymentsProducerRecord, new AsynchronousProducerCallback)
+      } else {
+        val nextPayment = Payment.getNextPayment
+        val paymentSummaryRecord = getPaymentAvroPayload(nextPayment)
+        val paymentMasterRecord = getPaymentMasterAvroPayload(nextPayment)
+        val invoiceRecord: InvoiceAvro = paymentMasterRecord.getInvoice
+
+        val invoiceProducerRecord = new ProducerRecord[String, InvoiceAvro](conf.getString(INVOICES_TOPIC), invoiceRecord.getInvoiceNumber, invoiceRecord)
+        invoicesAvroProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
+
+        val paymentsProducerRecord = new ProducerRecord[String, PaymentAvro](conf.getString(PAYMENTS_TOPIC), paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
+        paymentsAvroProducer.send(paymentsProducerRecord, new AsynchronousProducerCallback)
       }
-      if (dataFormat.equals("json")) {
-        kafkaJsonProducer[PaymentModel](payments, getPaymentsJsonPayload, getKafkaTopicName)
-        if(printOnConsole) kafkaJsonConsoleConsumer(numberOfPayments, getKafkaTopicName)
-      }
+      startIndex += 1
     }
   }
-
 }

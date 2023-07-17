@@ -1,39 +1,38 @@
 package com.bdcs.data.generator.customers
 
-import com.bdcs.data.generator.avro.customers._
-import com.bdcs.data.generator.lib.customers.CustomerModel
+import com.bdcs.data.generator.avro.payment._
+import com.bdcs.data.generator.lib.customer.Customer
 import org.json4s.DefaultFormats
 import org.json4s.jackson.Serialization.write
 
 object CustomerPayload {
-  def getCustomerJsonPayload(customer: CustomerModel): String = {
+  def getCustomerJsonPayload(customer: Customer): String = {
     implicit val formats: DefaultFormats.type = DefaultFormats
     write(customer)
   }
 
-  def getCustomerAvroPayload(customer: CustomerModel): CustomerAvro = {
+  def getCustomerAvroPayload(customer: Customer): CustomerAvro = {
 
-    val street = new Street(customer.address.street.number, customer.address.street.name)
     CustomerAvro.newBuilder
-      .setCustomerId(customer.customer_id)
+      .setCustomerId(customer.customerId)
+      .setTitle(customer.title)
+      .setFirstName(customer.firstName)
+      .setLastName(customer.lastName)
       .setGender(customer.gender)
-      .setName(new Name(customer.name.title, customer.name.first, customer.name.last))
-      .setAddress(new Address(
-        street,
+      .setDob(customer.dob)
+      .setRegistrationTimestamp(customer.registrationTimestamp)
+      .setContactNumber(customer.contactNumber)
+      .setEmail(customer.email)
+      .setAddress(new AddressAvro(
+        customer.address.addressLine,
         customer.address.city,
         customer.address.state,
         customer.address.country,
         customer.address.postcode
       ))
-      .setEmail(customer.email)
-      .setDob(new Dob(
-        customer.dob.date,
-        customer.dob.age
-      ))
-      .setRegistrationTimestamp(customer.registration_timestamp)
-      .setPhone(customer.phone)
+      .setCustomerType(customer.customerType)
+      .setCustomerCardNo(customer.customerCardNo)
       .build
   }
-
 
 }
