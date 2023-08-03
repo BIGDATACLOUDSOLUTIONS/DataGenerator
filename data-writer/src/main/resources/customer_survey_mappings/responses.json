@@ -1,0 +1,42 @@
+{"response_key": 101, "response_num": 1, "response_description": "Strongly Disagree"}
+{"response_key": 101, "response_num": 2, "response_description": "Disagree"}
+{"response_key": 101, "response_num": 3, "response_description": "Neutral"}
+{"response_key": 101, "response_num": 4, "response_description": "Agree"}
+{"response_key": 101, "response_num": 5, "response_description": "Strongly Agree"}
+{"response_key": 102, "response_num": 1, "response_description": "Daily"}
+{"response_key": 102, "response_num": 2, "response_description": "Weekly"}
+{"response_key": 102, "response_num": 3, "response_description": "Monthly"}
+{"response_key": 102, "response_num": 4, "response_description": "Rarely"}
+{"response_key": 103, "response_num": 1, "response_description": "Fresh Produce "}
+{"response_key": 103, "response_num": 2, "response_description": "Dairy"}
+{"response_key": 103, "response_num": 3, "response_description": "Bakery"}
+{"response_key": 103, "response_num": 4, "response_description": "Frozen Foods"}
+{"response_key": 103, "response_num": 5, "response_description": "Household"}
+{"response_key": 104, "response_num": 1, "response_description": "Never"}
+{"response_key": 104, "response_num": 2, "response_description": "Occasionally"}
+{"response_key": 104, "response_num": 3, "response_description": "Regularly"}
+{"response_key": 105, "response_num": 1, "response_description": "TV"}
+{"response_key": 105, "response_num": 2, "response_description": "Radio"}
+{"response_key": 105, "response_num": 3, "response_description": "Social Media"}
+{"response_key": 105, "response_num": 4, "response_description": "Newspaper"}
+{"response_key": 106, "response_num": 1, "response_description": "Competitive pricing"}
+{"response_key": 106, "response_num": 2, "response_description": "Wide product selection"}
+{"response_key": 106, "response_num": 3, "response_description": "Convenient store locations"}
+{"response_key": 106, "response_num": 4, "response_description": "Quality of products"}
+{"response_key": 106, "response_num": 5, "response_description": "Friendly and helpful staff"}
+{"response_key": 106, "response_num": 6, "response_description": "Loyalty program benefits"}
+{"response_key": 106, "response_num": 7, "response_description": "Clean and well-maintained stores"}
+{"response_key": 106, "response_num": 8, "response_description": "Online shopping options"}
+{"response_key": 107, "response_num": 1, "response_description": "Email newsletters"}
+{"response_key": 107, "response_num": 2, "response_description": "SMS\/text messages"}
+{"response_key": 107, "response_num": 3, "response_description": "Mobile app notifications"}
+{"response_key": 107, "response_num": 4, "response_description": "Social media updates"}
+{"response_key": 107, "response_num": 5, "response_description": "Printed flyers and brochures"}
+{"response_key": 108, "response_num": 1, "response_description": "Same-day home delivery"}
+{"response_key": 108, "response_num": 2, "response_description": "Click & Collect (Order online, pick up at the store)"}
+{"response_key": 108, "response_num": 3, "response_description": "Next-day delivery"}
+{"response_key": 108, "response_num": 4, "response_description": "Scheduled delivery (e.g., weekly or monthly)"}
+{"response_key": 109, "response_num": 1, "response_description": "Debit or credit cards"}
+{"response_key": 109, "response_num": 2, "response_description": "Mobile payment (e.g., Apple Pay, Google Pay)"}
+{"response_key": 109, "response_num": 3, "response_description": "Tesco Clubcard points"}
+{"response_key": 109, "response_num": 4, "response_description": "Cash"}

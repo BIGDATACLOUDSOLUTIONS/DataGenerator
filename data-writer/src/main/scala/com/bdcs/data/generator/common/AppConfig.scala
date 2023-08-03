@@ -28,8 +28,13 @@ object AppConfig {
 
 
   val PAYMENTS_MASTER_TOPIC: String = "generator.payments_master.topic_name"
-  val PRINT_PAYMENTS_MASTER_ON_CONSOLE: String = "generator.payments_master.invoices.print_message"
-  val PAYMENTS_MASTER_OUTPUT_FORMAT: String = "generator.invoices.output_data_format"
+  val PRINT_PAYMENTS_MASTER_ON_CONSOLE: String = "generator.payments_master.print_message"
+  val PAYMENTS_MASTER_OUTPUT_FORMAT: String = "generator.payments_master.output_data_format"
+
+  val CUSTOMERS_SURVEY_TARGET:String="generator.customer_survey.target"
+  val CUSTOMERS_SURVEY_TOPIC: String = "generator.customer_survey.topic_name"
+  val PRINT_CUSTOMERS_SURVEY_ON_CONSOLE: String = "generator.customer_survey.print_message"
+  val CUSTOMERS_SURVEY_OUTPUT_FORMAT: String = "generator.customer_survey.output_data_format"
 
 
   def getNoOfMessageToPublish: Int = conf.getString(NUMBER_OF_MESSAGES_TO_PUBLISH).toInt
