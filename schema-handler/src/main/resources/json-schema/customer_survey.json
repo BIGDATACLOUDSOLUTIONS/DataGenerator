@@ -1,0 +1,68 @@
+{
+  "javaType": "com.bdcs.data.generator.json.survey.CustomersSurveyJson",
+  "type": "object",
+  "properties": {
+    "response_id": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "overall_satisfactions": {
+      "type": "integer"
+    },
+    "recommend_to_others": {
+      "type": "integer"
+    },
+    "store_visit_frequency": {
+      "type": "integer"
+    },
+    "frequent_department_shopped": {
+      "type": "integer"
+    },
+    "product_variety_rating": {
+      "type": "integer"
+    },
+    "issues_faced": {
+      "type": "string",
+      "default": null
+    },
+    "last_visit_rating": {
+      "type": "integer"
+    },
+    "pricing_competitive": {
+      "type": "string"
+    },
+    "online_visit_frequency": {
+      "type": "integer"
+    },
+    "loyalty_program_rating": {
+      "type": "integer"
+    },
+    "marketing_channels": {
+      "type": "integer"
+    },
+    "improvements": {
+      "type": "string",
+      "default": null
+    },
+    "eco_friendly_practices": {
+      "type": "integer"
+    },
+    "influencing_factor_to_shop": {
+      "type": "integer"
+    },
+    "communication_preference": {
+      "type": "integer"
+    },
+    "delivery_preference": {
+      "type": "integer"
+    },
+    "payment_mode_preference": {
+      "type": "integer"
+    },
+    "date_of_survey": {
+      "type": "string"
+    }
+  }
+}

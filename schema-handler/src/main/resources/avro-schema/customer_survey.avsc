@@ -1,0 +1,90 @@
+{
+  "namespace": "com.bdcs.data.generator.avro.survey",
+  "type": "record",
+  "name": "CustomersSurveyAvro",
+  "version": "1",
+  "fields": [
+    {
+      "name": "response_id",
+      "type": "string"
+    },
+    {
+      "name": "customer_id",
+      "type": "string"
+    },
+    {
+      "name": "overall_satisfactions",
+      "type": "int"
+    },
+    {
+      "name": "recommend_to_others",
+      "type": "int"
+    },
+    {
+      "name": "store_visit_frequency",
+      "type": "int"
+    },
+    {
+      "name": "frequent_department_shopped",
+      "type": "int"
+    },
+    {
+      "name": "product_variety_rating",
+      "type": "int"
+    },
+    {
+      "name": "issues_faced",
+      "type": ["null","string"],
+      "default": null
+    },
+    {
+      "name": "last_visit_rating",
+      "type": "int"
+    },
+    {
+      "name": "pricing_competitive",
+      "type": "string"
+    },
+    {
+      "name": "online_visit_frequency",
+      "type": "int"
+    },
+    {
+      "name": "loyalty_program_rating",
+      "type": "int"
+    },
+    {
+      "name": "marketing_channels",
+      "type": "int"
+    },
+    {
+      "name": "improvements",
+      "type": ["null","string"],
+      "default": null
+    },
+    {
+      "name": "eco_friendly_practices",
+      "type": "int"
+    },
+    {
+      "name": "influencing_factor_to_shop",
+      "type": "int"
+    },
+    {
+      "name": "communication_preference",
+      "type": "int"
+    },
+    {
+      "name": "delivery_preference",
+      "type": "int"
+    },
+    {
+      "name": "payment_mode_preference",
+      "type": "int"
+    },
+    {
+      "name": "date_of_survey",
+      "type": "string"
+    }
+  ]
+}
