@@ -4,6 +4,7 @@ import com.bdcs.data.generator.avro.payment._
 import com.bdcs.data.generator.lib.payment.Payment
 
 import com.bdcs.data.generator.invoices.InvoiceAvroPayload._
+
 object PaymentAvroPayload {
 
   def getPaymentMasterAvroPayload(payment: Payment): PaymentMasterAvro = {
@@ -19,6 +20,7 @@ object PaymentAvroPayload {
       .setStore(getStore(payment.store))
       .setCustomer(getCustomer(payment.customer))
       .setDeliveryType(payment.deliveryType)
+      .setEventTimestamp(System.currentTimeMillis.toString)
 
     if ("HOME-DELIVERY".equalsIgnoreCase(paymentMaster.getDeliveryType)) {
       val deliveryAddress = getAddress(payment.deliveryAddress)
@@ -44,12 +46,13 @@ object PaymentAvroPayload {
       .setStoreId(payment.store.storeId)
       .setCustomerId(payment.customer.customerId)
       .setDeliveryType(payment.deliveryType)
+      .setEventTimestamp(System.currentTimeMillis.toString)
+
     if ("HOME-DELIVERY".equalsIgnoreCase(paymentSummary.getDeliveryType)) {
       paymentSummary.setDeliveryAddress(deliveryAddress)
     }
     paymentSummary.build
   }
-
 
 
 }

@@ -21,6 +21,7 @@ object PaymentJsonPayload {
     paymentMaster.setStore(getStore(payment.store))
     paymentMaster.setCustomer(getCustomer(payment.customer))
     paymentMaster.setDeliveryType(payment.deliveryType)
+    paymentMaster.setEventTimestamp(System.currentTimeMillis.toString)
 
     if ("HOME-DELIVERY".equalsIgnoreCase(paymentMaster.getDeliveryType)) {
       val deliveryAddress = getAddress(payment.deliveryAddress)
@@ -45,6 +46,8 @@ object PaymentJsonPayload {
     paymentSummary.setStoreId(payment.store.storeId)
     paymentSummary.setCustomerId(payment.customer.customerId)
     paymentSummary.setDeliveryType(payment.deliveryType)
+    paymentSummary.setEventTimestamp(System.currentTimeMillis.toString)
+
     if ("HOME-DELIVERY".equalsIgnoreCase(paymentSummary.getDeliveryType)) {
       paymentSummary.setDeliveryAddress(deliveryAddress)
     }

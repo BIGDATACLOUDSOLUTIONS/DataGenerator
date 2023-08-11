@@ -12,21 +12,21 @@ import com.bdcs.data.generator.payments.PaymentJsonPayload.getPaymentMasterJsonP
 import com.bdcs.data.generator.payments.PaymentAvroPayload.getPaymentMasterAvroPayload
 
 
-
 object PaymentsMasterWriter {
 
   def apply(): Unit = {
     val numberOfPayments = getNoOfMessageToPublish
-    val dataFormat: String = conf.getString(PAYMENTS_MASTER_OUTPUT_FORMAT)
 
     Payment()
-    paymentsMasterWriter(numberOfPayments, dataFormat)
+    paymentsMasterWriter(numberOfPayments)
   }
 
 
-  private def paymentsMasterWriter(numberOfPayments: Int,
-                                   dataFormat: String
-                          ): Unit = {
+  private def paymentsMasterWriter(numberOfPayments: Int
+                                  ): Unit = {
+
+    val dataFormat: String = conf.getString(PAYMENTS_MASTER_OUTPUT_FORMAT)
+    val kafkaTopicName = s"${conf.getString(PAYMENTS_MASTER_TOPIC)}-${dataFormat}"
 
     val properties = kafkaProducerProperties("payments-master")
 
@@ -46,12 +46,12 @@ object PaymentsMasterWriter {
 
       if (dataFormat.equalsIgnoreCase("json")) {
         val payment = getPaymentMasterJsonPayload(nextPayment)
-        val paymentProducerRecord = new ProducerRecord[String, PaymentMasterJson](conf.getString(PAYMENTS_MASTER_TOPIC), payment.getPaymentId, payment)
+        val paymentProducerRecord = new ProducerRecord[String, PaymentMasterJson](kafkaTopicName, payment.getPaymentId, payment)
         paymentsMasterJsonProducer.send(paymentProducerRecord, new AsynchronousProducerCallback)
 
       } else {
         val payment = getPaymentMasterAvroPayload(nextPayment)
-        val paymentProducerRecord = new ProducerRecord[String, PaymentMasterAvro](conf.getString(PAYMENTS_MASTER_TOPIC), payment.getPaymentId, payment)
+        val paymentProducerRecord = new ProducerRecord[String, PaymentMasterAvro](kafkaTopicName, payment.getPaymentId, payment)
         paymentsMasterAvroProducer.send(paymentProducerRecord, new AsynchronousProducerCallback)
       }
       startIndex += 1

@@ -12,28 +12,30 @@ data in files while some part of data in kafka. Also, we want to perform joins b
 You can configure(config/data_generator.conf) and run the application for any of the below dataset. 
 The data will be written to kafka in specified format(avro/json)
 
-## Payment Summary ER Diagram
-![PaymentSummary.png](PaymentSummary.png)
+# Data Categories:
 
-## Payment Master ER Diagram
-![PaymentMaster.png](PaymentMaster.png)
-
-- Invoices:
+## Invoices:
   - Invoice contains Invoice identifiers and orders details. 
   - Order is a nested json which contains order level info and array of order line details
   - Order line details contains Product and other order line info
-- Payments:
+### Invoices Summary ER Diagram
+![Invoices.png](Invoices.png)
+## Payments:
   - This is short description of Payment-Master and contains only keys for customer, store and invoice.
   - This contains joining keys like invoiceNumber, customerId, StoreId.
   - In case of Payments, both Payment and Invoices are generated on kafka topic so that the joining can be done based on invoiceNumber 
-- Payment-Master: 
+### Payment Summary ER Diagram
+![PaymentSummary.png](PaymentSummary.png)
+
+## PaymentsMaster: 
   - This contains all the fields of all the dataset in nested json.
   - Contains Invoice, Customer, Stores
   - Invoice contains Orders
   - Order contains Array of OrderLineDetails
   - OrderLineDetails contains order line details also with Product details
   - This is a single nested json which contains all the information for a payment
-
+### Payment Master ER Diagram
+![PaymentMaster.png](PaymentMaster.png)
 
 
 ### Configuration Parameters

@@ -13,7 +13,8 @@
     "storeId": {"type": "string" },
     "customerId": {"type": "string" },
     "deliveryType": {"type": "string" },
-    "deliveryAddress": { "$ref": "#/definitions/Address" }
+    "deliveryAddress": { "$ref": "#/definitions/Address" },
+    "eventTimestamp": {"type": "string" }
   },
   "definitions": {
     "Address": {

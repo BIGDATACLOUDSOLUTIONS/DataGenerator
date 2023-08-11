@@ -25,9 +25,10 @@ object CustomerSurveyWriter {
 
   private def customerSurveyWriter(numberOfSurveyResponse: Int): Unit = {
     val targetType: String = conf.getString(CUSTOMERS_SURVEY_TARGET)
-    val kafkaTopicName: String = conf.getString(CUSTOMERS_SURVEY_TOPIC)
     val printMessagesOnConsole: Boolean = conf.getString(PRINT_CUSTOMERS_SURVEY_ON_CONSOLE).toBoolean
     val outputDataFormat: String = conf.getString(CUSTOMERS_SURVEY_OUTPUT_FORMAT)
+
+    val kafkaTopicName: String = s"${conf.getString(CUSTOMERS_SURVEY_TOPIC)}-$outputDataFormat"
 
     if (targetType.equalsIgnoreCase("kafka")) {
       val surveyProp = kafkaProducerProperties("customerSurvey")

@@ -67,7 +67,7 @@ object InvoiceWriter {
         val invoice = InvoiceJsonPayload.getInvoice(Invoice.getNextInvoice)
         invoice.setCustomerId(customer.customerId)
         invoice.setStoreId(store.storeId)
-        val invoiceProducerRecord = new ProducerRecord[String, InvoiceJson](conf.getString(INVOICES_TOPIC), invoice.getInvoiceNumber, invoice)
+        val invoiceProducerRecord = new ProducerRecord[String, InvoiceJson](s"${conf.getString(INVOICES_TOPIC)}-json", invoice.getInvoiceNumber, invoice)
         invoicesJsonProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
       } else {
         val invoice: InvoiceAvro = {
@@ -76,7 +76,7 @@ object InvoiceWriter {
             .setStoreId(store.storeId)
             .build()
         }
-        val avroKafkaProducerRecord = new ProducerRecord[String, InvoiceAvro](conf.getString(INVOICES_TOPIC), invoice.getInvoiceNumber, invoice)
+        val avroKafkaProducerRecord = new ProducerRecord[String, InvoiceAvro](s"${conf.getString(INVOICES_TOPIC)}-avro", invoice.getInvoiceNumber, invoice)
         invoicesAvroProducer.send(avroKafkaProducerRecord, new AsynchronousProducerCallback)
       }
       startIndex += 1
