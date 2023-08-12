@@ -47,7 +47,7 @@ object Payment {
   }
 
   private def getNextPaymentDate(invoiceCreateDate: String): String = {
-    DateTime.parse(invoiceCreateDate, formatter).plusDays(random.nextInt(9)).toString(formatter)
+    DateTime.parse(invoiceCreateDate, formatter).plusDays(random.nextInt(5)).toString(formatter)
   }
 
   private def getPaymentId: Int = paymentId.nextInt(99999999) + 99999
