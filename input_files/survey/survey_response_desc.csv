@@ -1,0 +1,43 @@
+response_key,response_num,response_description
+101,1,Strongly Disagree
+101,2,Disagree
+101,3,Neutral
+101,4,Agree
+101,5,Strongly Agree
+102,1,Daily
+102,2,Weekly
+102,3,Monthly
+102,4,Rarely
+103,1,Fresh Produce
+103,2,Dairy
+103,3,Bakery
+103,4,Frozen Foods
+103,5,Household
+104,1,Never
+104,2,Occasionally
+104,3,Regularly
+105,1,TV
+105,2,Radio
+105,3,Social Media
+105,4,Newspaper
+106,1,Competitive pricing
+106,2,Wide product selection
+106,3,Convenient store locations
+106,4,Quality of products
+106,5,Friendly and helpful staff
+106,6,Loyalty program benefits
+106,7,Clean and well-maintained stores
+106,8,Online shopping options
+107,1,Email newsletters
+107,2,SMS/text messages
+107,3,Mobile app notifications
+107,4,Social media updates
+107,5,Printed flyers and brochures
+108,1,Same-day home delivery
+108,2,"Click & Collect (Order online, pick up at the store)"
+108,3,Next-day delivery
+108,4,"Scheduled delivery (e.g., weekly or monthly)"
+109,1,Debit or credit cards
+109,2,"Mobile payment (e.g., Apple Pay, Google Pay)"
+109,3,Tesco Clubcard points
+109,4,Cash

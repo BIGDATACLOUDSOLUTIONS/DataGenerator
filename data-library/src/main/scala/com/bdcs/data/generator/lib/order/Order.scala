@@ -49,7 +49,7 @@ object Order {
     Order(
       orderId = faker.number().randomNumber(10, true).toString,
       numberOfItems = numberOfItems,
-      orderDate = DateTime.now.minus(random.nextInt(100)).toString(formatter),
+      orderDate = DateTime.now.minusDays(random.nextInt(5) + 10).toString(formatter),
       totalOrderAmount = roundValue(totalAmount),
       orderLineItems = items.asScala.toArray
     )

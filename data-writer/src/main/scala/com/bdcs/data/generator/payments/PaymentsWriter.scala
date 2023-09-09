@@ -24,34 +24,43 @@ object PaymentsWriter {
 
   def apply(): Unit = {
     val numberOfPayments = getNoOfMessageToPublish
-    val dataFormat: String = conf.getString(PAYMENTS_OUTPUT_FORMAT)
 
     Payment()
     CustomersWriter.customerWriter(Customer.customers)
     ProductsWriter.productsWriter(Product.products)
     StoresWriter.storesWriter(Store.stores)
 
-    paymentsWriter(numberOfPayments, dataFormat)
+    paymentsWriter(numberOfPayments)
   }
 
 
-  private def paymentsWriter(numberOfPayments: Int,
-                             dataFormat: String
+  private def paymentsWriter(numberOfPayments: Int
                             ): Unit = {
 
     val paymentsProp = kafkaProducerProperties("payments")
     val invoicesProp = kafkaProducerProperties("invoices")
-    if (dataFormat.equalsIgnoreCase("json")) {
+
+    val paymentsDataFormat: String = conf.getString(PAYMENTS_OUTPUT_FORMAT)
+    val invoicesDataFormat: String = conf.getString(INVOICES_OUTPUT_FORMAT)
+
+    val paymentsTopicName = s"${conf.getString(PAYMENTS_TOPIC)}-$paymentsDataFormat"
+    val invoicesTopicName = s"${conf.getString(INVOICES_TOPIC)}-$invoicesDataFormat"
+
+    if (paymentsDataFormat.equalsIgnoreCase("json")) {
       paymentsProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[PaymentJsonSerializer].getName)
-      invoicesProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[InvoiceJsonSerializer].getName)
     } else {
       paymentsProp.setProperty("schema.registry.url", getSchemaRegistryUrl)
-      invoicesProp.setProperty("schema.registry.url", getSchemaRegistryUrl)
       paymentsProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
+    }
+
+    if (invoicesDataFormat.equalsIgnoreCase("json")) {
+      invoicesProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[InvoiceJsonSerializer].getName)
+    } else {
+      invoicesProp.setProperty("schema.registry.url", getSchemaRegistryUrl)
       invoicesProp.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[KafkaAvroSerializer].getName)
     }
 
-    val invoicesAvroProducer: Producer[String, InvoiceAvro] = new KafkaProducer[String, InvoiceAvro](paymentsProp)
+    val invoicesAvroProducer: Producer[String, InvoiceAvro] = new KafkaProducer[String, InvoiceAvro](invoicesProp)
     val invoicesJsonProducer: Producer[String, InvoiceJson] = new KafkaProducer[String, InvoiceJson](invoicesProp)
 
     val paymentsAvroProducer: Producer[String, PaymentAvro] = new KafkaProducer[String, PaymentAvro](paymentsProp)
@@ -59,35 +68,28 @@ object PaymentsWriter {
 
     var startIndex: Int = 1
     while (startIndex <= numberOfPayments) {
-      if (dataFormat.equalsIgnoreCase("json")) {
-        val nextPayment = Payment.getNextPayment
+      val nextPayment = Payment.getNextPayment
+
+      if (paymentsDataFormat.equalsIgnoreCase("json")) {
         val paymentSummaryRecord = getPaymentJsonPayload(nextPayment)
-
-        val invoiceRecord: InvoiceJson = InvoiceJsonPayload.getInvoice(nextPayment.invoice)
-        invoiceRecord.setCustomerId(nextPayment.customer.customerId)
-        invoiceRecord.setStoreId(nextPayment.store.storeId)
-
-        val invoiceProducerRecord = new ProducerRecord[String, InvoiceJson](conf.getString(INVOICES_TOPIC), invoiceRecord.getInvoiceNumber, invoiceRecord)
-        invoicesJsonProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
-
-        val paymentsProducerRecord = new ProducerRecord[String, PaymentJson](conf.getString(PAYMENTS_TOPIC), paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
+        val paymentsProducerRecord = new ProducerRecord[String, PaymentJson](paymentsTopicName, paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
         paymentsJsonProducer.send(paymentsProducerRecord, new AsynchronousProducerCallback)
       } else {
-        val nextPayment = Payment.getNextPayment
         val paymentSummaryRecord = getPaymentAvroPayload(nextPayment)
-
-        val invoiceRecord: InvoiceAvro = {
-          InvoiceAvroPayload.getInvoiceAvroBuilder(nextPayment.invoice)
-            .setCustomerId(nextPayment.customer.customerId)
-            .setStoreId(nextPayment.store.storeId)
-            .build()
-        }
-
-        val invoiceProducerRecord = new ProducerRecord[String, InvoiceAvro](conf.getString(INVOICES_TOPIC), invoiceRecord.getInvoiceNumber, invoiceRecord)
-        invoicesAvroProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
-
-        val paymentsProducerRecord = new ProducerRecord[String, PaymentAvro](conf.getString(PAYMENTS_TOPIC), paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
+        val paymentsProducerRecord = new ProducerRecord[String, PaymentAvro](paymentsTopicName, paymentSummaryRecord.getPaymentId, paymentSummaryRecord)
         paymentsAvroProducer.send(paymentsProducerRecord, new AsynchronousProducerCallback)
+      }
+
+      if (invoicesDataFormat.equalsIgnoreCase("json")) {
+        val invoiceRecord: InvoiceJson = InvoiceJsonPayload.getInvoice(nextPayment.invoice)
+        val invoiceProducerRecord = new ProducerRecord[String, InvoiceJson](invoicesTopicName, invoiceRecord.getInvoiceNumber, invoiceRecord)
+        invoicesJsonProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
+      } else {
+        val invoiceRecord: InvoiceAvro = {
+          InvoiceAvroPayload.getInvoice(nextPayment.invoice)
+        }
+        val invoiceProducerRecord = new ProducerRecord[String, InvoiceAvro](invoicesTopicName, invoiceRecord.getInvoiceNumber, invoiceRecord)
+        invoicesAvroProducer.send(invoiceProducerRecord, new AsynchronousProducerCallback)
       }
       startIndex += 1
     }

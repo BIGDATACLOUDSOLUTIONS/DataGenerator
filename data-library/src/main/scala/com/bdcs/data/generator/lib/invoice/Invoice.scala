@@ -35,7 +35,7 @@ object Invoice {
   private val formatter = format.DateTimeFormat.forPattern("yyyy-MM-dd")
 
   private def getInvoiceDate(orderDate: String): String = {
-    DateTime.parse(orderDate, formatter).plusDays(random.nextInt(15)).toString(formatter)
+    DateTime.parse(orderDate, formatter).plusDays(random.nextInt(5)).toString(formatter)
   }
 
   private def getNewInvoiceNumber: Int = invoiceNumber.nextInt(99999999) + 99999

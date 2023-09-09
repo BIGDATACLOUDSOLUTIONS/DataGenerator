@@ -83,10 +83,11 @@ object InvoiceAvroPayload {
       invoice.cESS,
       getOrder(invoice.order),
       null,
-      null)
+      null,
+      System.currentTimeMillis.toString)
   }
 
-  def getInvoiceAvroBuilder(invoice:Invoice):InvoiceAvro.Builder={
+  def getInvoiceAvroBuilder(invoice: Invoice): InvoiceAvro.Builder = {
     InvoiceAvro.newBuilder
       .setInvoiceNumber(invoice.invoiceNumber)
       .setCreatedTime(invoice.createdTime)
@@ -95,6 +96,7 @@ object InvoiceAvroPayload {
       .setSGST(invoice.sGST)
       .setCESS(invoice.cESS)
       .setOrder(getOrder(invoice.order))
+      .setEventTimestamp(System.currentTimeMillis.toString)
   }
 
 }

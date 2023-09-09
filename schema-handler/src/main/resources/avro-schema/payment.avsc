@@ -91,7 +91,8 @@
       { "name": "cESS", "type": "double" },
       { "name": "order", "type": "com.bdcs.data.generator.avro.payment.OrderAvro" },
       { "name": "customerId",  "type": ["null","string"],  "default": null },
-      { "name": "storeId" , "type": ["null","string"],  "default": null }
+      { "name": "storeId" , "type": ["null","string"],  "default": null },
+      { "name": "eventTimestamp", "type": "string" }
     ]
   },
   {
@@ -111,7 +112,8 @@
       { "name": "store", "type": "com.bdcs.data.generator.avro.payment.StoreAvro"},
       { "name": "customer", "type": "com.bdcs.data.generator.avro.payment.CustomerAvro"},
       { "name": "deliveryType", "type": "string"},
-      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null }
+      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null },
+      { "name": "eventTimestamp", "type": "string" }
     ]
   },
   {
@@ -131,7 +133,8 @@
       { "name": "storeId","type": "string"},
       { "name": "customerId", "type": "string" },
       { "name": "deliveryType", "type": "string"},
-      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null }
+      { "name": "deliveryAddress", "type": ["null", "com.bdcs.data.generator.avro.payment.AddressAvro"], "default": null },
+      { "name": "eventTimestamp", "type": "string" }
     ]
   }
 ]

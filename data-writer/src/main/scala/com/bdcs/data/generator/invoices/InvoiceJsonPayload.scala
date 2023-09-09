@@ -91,6 +91,7 @@ object InvoiceJsonPayload {
     invoiceData.setSGST(invoice.sGST)
     invoiceData.setCESS(invoice.cESS)
     invoiceData.setOrder(getOrder(invoice.order))
+    invoiceData.setEventTimestamp(System.currentTimeMillis.toString)
     invoiceData
   }
 

@@ -32,6 +32,7 @@ object Payment {
 
   val faker = new Faker()
   val random: Random = new Random()
+  private val paymentId = new Random()
 
   private val formatter = format.DateTimeFormat.forPattern("yyyy-MM-dd")
 
@@ -46,8 +47,11 @@ object Payment {
   }
 
   private def getNextPaymentDate(invoiceCreateDate: String): String = {
-    DateTime.parse(invoiceCreateDate, formatter).plusDays(random.nextInt(9)).toString(formatter)
+    DateTime.parse(invoiceCreateDate, formatter).plusDays(random.nextInt(5)).toString(formatter)
   }
+
+  private def getPaymentId: Int = paymentId.nextInt(99999999) + 99999
+
 
 
   def getNextPayment: Payment = {
@@ -60,7 +64,7 @@ object Payment {
     val amountToBePaid = roundValue(((invoice.taxableAmount + invoice.cGST + invoice.sGST + invoice.cESS) * discount) / 100)
 
     Payment(
-      paymentId = faker.random().hex(8),
+      paymentId =  Integer.toString(getPaymentId),
       paymentDate = getNextPaymentDate(invoice.createdTime),
       posID = s"POS${faker.number().randomNumber(3, false).toString}",
       cashierID = s"OAS${faker.number().randomNumber(3, false).toString}",

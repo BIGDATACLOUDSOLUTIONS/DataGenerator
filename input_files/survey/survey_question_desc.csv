@@ -1,0 +1,18 @@
+survey_questions,question_description,response_key
+overallSatisfactions,how satisfied are you with your overall shopping experience at Tesco,101
+recommendToOthers,How likely are you to recommend Tesco to your friends or family,101
+storeVisitFrequency,How frequently do you visit Tesco for your grocery shopping,102
+frequentDepartmentShopped,Which department(s) do you usually shop in at Tesco,103
+productVarietyRating,How do you rate the variety and selection of products available at Tesco,101
+issuesFaced,"Have you ever faced any issues during your shopping experience at Tesco? If yes, please describe the problem briefly",NA
+lastVisitRating,How satisfied are you with the customer service you received during your last visit to Tesco?,101
+pricingCompetitive,Do you find Tesco's pricing competitive compared to other retail stores,NA
+onlineVisitFrequency,How often do you use Tesco's online shopping platform for home delivery,104
+loyaltyProgramRating,How likely are you to use Tesco's loyalty program or rewards program?,101
+marketingChannels,Which marketing channels or advertisements influenced your decision to visit Tesco?,105
+improvements,What improvements would you like to see in Tesco's store layout and organization?,103
+ecoFriendlyPractices,How important is environmental sustainability and eco-friendly practices in Tesco's operations?,101
+influencingFactorToShop,Which of the following factors influence your decision to shop at Tesco,106
+communicationPreference,How do you prefer to receive updates about Tesco's latest offers and promotions,107
+deliveryPreference,Which grocery delivery options do you prefer,108
+paymentModePreference,Which payment methods do you prefer using at Tesco?,109
