@@ -61,7 +61,9 @@ object CustomersFeedback {
       onlineVisitFrequency = Random.nextInt(3) + 1,
       loyaltyProgramRating = getRandomNumber,
       marketingChannels = Random.nextInt(4) + 1,
-      improvements = null,
+      improvements = {
+        List(null, List(getRandomNumber, getRandomNumber).mkString(","))(random.nextInt(2))
+      },
       ecoFriendlyPractices = getRandomNumber,
       influencingFactorToShop = Random.nextInt(8) + 1,
       communicationPreference = getRandomNumber,
